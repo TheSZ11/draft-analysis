@@ -1,0 +1,376 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for draft-tracker/src/leagueConfig.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">draft-tracker/src</a> leagueConfig.js</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">88.29% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>83/94</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/0</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">0% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>0/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">88.29% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>83/94</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line high'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import leagueRules from '../league-rules-parsed.json';
+&nbsp;
+// Convert league rules to the format expected by the app
+export const LEAGUE_CONFIG = {
+  // Basic league info
+  info: leagueRules.leagueInfo,
+  
+  // Position limits (convert from league rules format to app format)
+  positionLimits: {
+    D: {
+      minActive: leagueRules.rosterRequirements.positions.defender.minActive,
+      maxActive: leagueRules.rosterRequirements.positions.defender.maxActive,
+      totalMax: leagueRules.rosterRequirements.positions.defender.totalMax
+    },
+    M: {
+      minActive: leagueRules.rosterRequirements.positions.midfielder.minActive,
+      maxActive: leagueRules.rosterRequirements.positions.midfielder.maxActive,
+      totalMax: leagueRules.rosterRequirements.positions.midfielder.totalMax
+    },
+    F: {
+      minActive: leagueRules.rosterRequirements.positions.forward.minActive,
+      maxActive: leagueRules.rosterRequirements.positions.forward.maxActive,
+      totalMax: leagueRules.rosterRequirements.positions.forward.totalMax
+    },
+    G: {
+      minActive: leagueRules.rosterRequirements.positions.goalkeeper.minActive,
+      maxActive: leagueRules.rosterRequirements.positions.goalkeeper.maxActive,
+      totalMax: leagueRules.rosterRequirements.positions.goalkeeper.totalMax
+    }
+  },
+  
+  // Roster limits
+  rosterLimits: {
+    maxTotalPlayers: leagueRules.rosterRequirements.totalPlayers.maximum,
+    maxActivePlayers: leagueRules.rosterRequirements.activePlayers.maximum,
+    maxReservePlayers: leagueRules.rosterRequirements.reservePlayers.maximum,
+    maxInjuredReservePlayers: leagueRules.rosterRequirements.injuryReservePlayers.maximum
+  },
+  
+  // Scoring rules converted to app format
+  scoringRules: {
+    // Goalkeepers
+    assists: { G: leagueRules.scoringRules.goalkeeper.assists_total, D: leagueRules.scoringRules.outfielder.defender.assists_total, M: leagueRules.scoringRules.outfielder.default.assists_total, F: leagueRules.scoringRules.outfielder.default.assists_total },
+    assistsSecond: { G: leagueRules.scoringRules.goalkeeper.assists_second, D: leagueRules.scoringRules.outfielder.default.assists_second, M: leagueRules.scoringRules.outfielder.default.assists_second, F: leagueRules.scoringRules.outfielder.default.assists_second },
+    keyPasses: { G: leagueRules.scoringRules.goalkeeper.key_passes, D: leagueRules.scoringRules.outfielder.default.key_passes, M: leagueRules.scoringRules.outfielder.default.key_passes, F: leagueRules.scoringRules.outfielder.default.key_passes },
+    shotsOnTarget: { G: leagueRules.scoringRules.goalkeeper.shots_on_target, D: leagueRules.scoringRules.outfielder.default.shots_on_target, M: leagueRules.scoringRules.outfielder.default.shots_on_target, F: leagueRules.scoringRules.outfielder.default.shots_on_target },
+    goals: { G: leagueRules.scoringRules.goalkeeper.goals, D: leagueRules.scoringRules.outfielder.defender.goals, M: leagueRules.scoringRules.outfielder.default.goals, F: leagueRules.scoringRules.outfielder.default.goals },
+    tacklesWon: { G: leagueRules.scoringRules.goalkeeper.tackles_won, D: leagueRules.scoringRules.outfielder.default.tackles_won, M: leagueRules.scoringRules.outfielder.default.tackles_won, F: leagueRules.scoringRules.outfielder.default.tackles_won },
+    interceptions: { G: leagueRules.scoringRules.goalkeeper.interceptions, D: leagueRules.scoringRules.outfielder.default.interceptions, M: leagueRules.scoringRules.outfielder.default.interceptions, F: leagueRules.scoringRules.outfielder.default.interceptions },
+    successfulDribbles: { G: leagueRules.scoringRules.goalkeeper.successful_dribbles, D: leagueRules.scoringRules.outfielder.default.successful_dribbles, M: leagueRules.scoringRules.outfielder.default.successful_dribbles, F: leagueRules.scoringRules.outfielder.default.successful_dribbles },
+    accurateCrossesNoCorners: { G: leagueRules.scoringRules.goalkeeper.accurate_crosses_no_corners, D: leagueRules.scoringRules.outfielder.default.accurate_crosses_no_corners, M: leagueRules.scoringRules.outfielder.default.accurate_crosses_no_corners, F: leagueRules.scoringRules.outfielder.default.accurate_crosses_no_corners },
+    penaltyKicksDrawn: { G: leagueRules.scoringRules.goalkeeper.penalty_kicks_drawn, D: leagueRules.scoringRules.outfielder.default.penalty_kicks_drawn, M: leagueRules.scoringRules.outfielder.default.penalty_kicks_drawn, F: leagueRules.scoringRules.outfielder.default.penalty_kicks_drawn },
+    foulsSuffered: { G: leagueRules.scoringRules.goalkeeper.fouls_suffered, D: leagueRules.scoringRules.outfielder.default.fouls_suffered, M: leagueRules.scoringRules.outfielder.default.fouls_suffered, F: leagueRules.scoringRules.outfielder.default.fouls_suffered },
+&nbsp;
+    // Position-Specific &amp; Goalkeeper Stats
+    saves: { G: leagueRules.scoringRules.goalkeeper.saves, D: 0, M: 0, F: 0 },
+    penaltyKickSaves: { G: leagueRules.scoringRules.goalkeeper.penalty_kick_saves, D: 0, M: 0, F: 0 },
+    highClaimsSucceeded: { G: leagueRules.scoringRules.goalkeeper.high_claims_succeeded, D: 0, M: 0, F: 0 },
+    cleanSheets: { G: leagueRules.scoringRules.goalkeeper.clean_sheets, D: leagueRules.scoringRules.outfielder.default.clean_sheets_on_field, M: leagueRules.scoringRules.outfielder.midfielder.clean_sheets_on_field, F: leagueRules.scoringRules.outfielder.forward.clean_sheets_on_field },
+    aerialsWon: { G: leagueRules.scoringRules.goalkeeper.aerials_won, D: leagueRules.scoringRules.outfielder.defender.aerials_won, M: leagueRules.scoringRules.outfielder.default.aerials_won, F: leagueRules.scoringRules.outfielder.default.aerials_won },
+    blockedShots: { G: leagueRules.scoringRules.outfielder.default.blocked_shots, D: leagueRules.scoringRules.outfielder.defender.blocked_shots, M: leagueRules.scoringRules.outfielder.midfielder.blocked_shots, F: leagueRules.scoringRules.outfielder.default.blocked_shots },
+    effectiveClearances: { G: leagueRules.scoringRules.goalkeeper.effective_clearances, D: leagueRules.scoringRules.outfielder.defender.effective_clearances, M: leagueRules.scoringRules.outfielder.midfielder.effective_clearances, F: leagueRules.scoringRules.outfielder.default.effective_clearances },
+    ballRecoveries: { G: 0, D: leagueRules.scoringRules.outfielder.default.ball_recoveries, M: leagueRules.scoringRules.outfielder.default.ball_recoveries, F: leagueRules.scoringRules.outfielder.default.ball_recoveries },
+&nbsp;
+    // Negative Points
+    dispossessed: { G: leagueRules.scoringRules.goalkeeper.dispossessed, D: leagueRules.scoringRules.outfielder.default.dispossessed, M: leagueRules.scoringRules.outfielder.default.dispossessed, F: leagueRules.scoringRules.outfielder.default.dispossessed },
+    foulsCommitted: { G: leagueRules.scoringRules.goalkeeper.fouls_committed, D: leagueRules.scoringRules.outfielder.default.fouls_committed, M: leagueRules.scoringRules.outfielder.default.fouls_committed, F: leagueRules.scoringRules.outfielder.default.fouls_committed },
+    ownGoals: { G: leagueRules.scoringRules.goalkeeper.own_goals, D: leagueRules.scoringRules.outfielder.default.own_goals, M: leagueRules.scoringRules.outfielder.default.own_goals, F: leagueRules.scoringRules.outfielder.default.own_goals },
+    // IMPORTANT FIX: Goals against only applies to goalkeepers and defenders, not all outfielders
+    goalsAgainst: { G: leagueRules.scoringRules.goalkeeper.goals_against, D: leagueRules.scoringRules.outfielder.defender.goals_against_outfielders, M: leagueRules.scoringRules.outfielder.default.goals_against_outfielders, F: leagueRules.scoringRules.outfielder.default.goals_against_outfielders },
+    yellowCards: { G: leagueRules.scoringRules.goalkeeper.yellow_cards, D: leagueRules.scoringRules.outfielder.default.yellow_cards, M: leagueRules.scoringRules.outfielder.default.yellow_cards, F: leagueRules.scoringRules.outfielder.default.yellow_cards },
+    redCards: { G: leagueRules.scoringRules.goalkeeper.red_cards, D: leagueRules.scoringRules.outfielder.default.red_cards, M: leagueRules.scoringRules.outfielder.default.red_cards, F: leagueRules.scoringRules.outfielder.default.red_cards },
+    penaltyKicksMissed: { G: leagueRules.scoringRules.goalkeeper.penalty_kicks_missed, D: leagueRules.scoringRules.outfielder.default.penalty_kicks_missed, M: leagueRules.scoringRules.outfielder.default.penalty_kicks_missed, F: leagueRules.scoringRules.outfielder.default.penalty_kicks_missed },
+    handBalls: { G: 0, D: leagueRules.scoringRules.outfielder.default.hand_balls, M: leagueRules.scoringRules.outfielder.default.hand_balls, F: leagueRules.scoringRules.outfielder.default.hand_balls },
+    offsides: { G: 0, D: leagueRules.scoringRules.outfielder.default.offsides, M: leagueRules.scoringRules.outfielder.default.offsides, F: leagueRules.scoringRules.outfielder.default.offsides },
+    
+    // Additional stats from league rules
+    penalties: { G: leagueRules.scoringRules.goalkeeper.penalties, D: leagueRules.scoringRules.outfielder.default.penalties, M: leagueRules.scoringRules.outfielder.default.penalties, F: leagueRules.scoringRules.outfielder.default.penalties },
+  },
+  
+  // Draft info
+  draft: leagueRules.additionalRules.draft
+};
+&nbsp;
+// Helper function to create a team with proper league configuration
+export const createTeamTemplate = <span class="fstat-no" title="function not covered" >(id, name) =&gt; ({</span>
+<span class="cstat-no" title="statement not covered" >  id,</span>
+<span class="cstat-no" title="statement not covered" >  name,</span>
+<span class="cstat-no" title="statement not covered" >  picks: [],</span>
+<span class="cstat-no" title="statement not covered" >  // League roster requirements</span>
+<span class="cstat-no" title="statement not covered" >  positionLimits: { ...LEAGUE_CONFIG.positionLimits },</span>
+<span class="cstat-no" title="statement not covered" >  // Roster structure</span>
+<span class="cstat-no" title="statement not covered" >  activePlayers: [],</span>
+<span class="cstat-no" title="statement not covered" >  reservePlayers: [],</span>
+<span class="cstat-no" title="statement not covered" >  injuredReservePlayers: [],</span>
+<span class="cstat-no" title="statement not covered" >  // Limits</span>
+<span class="cstat-no" title="statement not covered" >  ...LEAGUE_CONFIG.rosterLimits</span>
+}); </pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2025-07-22T04:22:20.816Z
+            </div>
+        <script src="../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../sorter.js"></script>
+        <script src="../../block-navigation.js"></script>
+    </body>
+</html>
+    

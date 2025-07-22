@@ -1,0 +1,255 @@
+#root {
+  width: 100%;
+  margin: 0 auto;
+  text-align: left;
+}
+
+/* Force dark mode for entire application */
+* {
+  color-scheme: dark;
+}
+
+body {
+  background-color: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+/* Custom scrollbar styling for dark mode */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e293b;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Smooth transitions */
+* {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Better focus states for dark mode */
+button:focus,
+input:focus,
+select:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Custom styles for the new layout */
+.sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #475569 #1e293b;
+}
+
+/* Ensure proper height calculations */
+.h-screen {
+  height: 100vh;
+}
+
+/* Dark mode text colors */
+.text-gray-900 {
+  color: #f1f5f9 !important;
+}
+
+.text-gray-800 {
+  color: #e2e8f0 !important;
+}
+
+.text-gray-700 {
+  color: #cbd5e1 !important;
+}
+
+.text-gray-600 {
+  color: #94a3b8 !important;
+}
+
+.text-gray-500 {
+  color: #64748b !important;
+}
+
+.text-gray-400 {
+  color: #475569 !important;
+}
+
+/* Dark mode background colors */
+.bg-gray-50 {
+  background-color: #1e293b !important;
+}
+
+.bg-gray-100 {
+  background-color: #334155 !important;
+}
+
+.bg-gray-200 {
+  background-color: #475569 !important;
+}
+
+.bg-white {
+  background-color: #0f172a !important;
+}
+
+.bg-blue-50 {
+  background-color: #1e3a8a !important;
+}
+
+.bg-blue-100 {
+  background-color: #1d4ed8 !important;
+}
+
+.bg-green-50 {
+  background-color: #14532d !important;
+}
+
+.bg-green-100 {
+  background-color: #166534 !important;
+}
+
+.bg-red-50 {
+  background-color: #7f1d1d !important;
+}
+
+.bg-red-100 {
+  background-color: #991b1b !important;
+}
+
+.bg-yellow-50 {
+  background-color: #713f12 !important;
+}
+
+.bg-yellow-100 {
+  background-color: #854d0e !important;
+}
+
+.bg-orange-50 {
+  background-color: #7c2d12 !important;
+}
+
+.bg-orange-100 {
+  background-color: #9a3412 !important;
+}
+
+.bg-purple-50 {
+  background-color: #581c87 !important;
+}
+
+.bg-purple-100 {
+  background-color: #6b21a8 !important;
+}
+
+/* Dark mode border colors */
+.border-gray-200 {
+  border-color: #334155 !important;
+}
+
+.border-gray-300 {
+  border-color: #475569 !important;
+}
+
+.border-blue-200 {
+  border-color: #1d4ed8 !important;
+}
+
+.border-blue-400 {
+  border-color: #3b82f6 !important;
+}
+
+.border-blue-500 {
+  border-color: #3b82f6 !important;
+}
+
+/* Dark mode hover states */
+.hover\:bg-gray-50:hover {
+  background-color: #1e293b !important;
+}
+
+.hover\:bg-gray-100:hover {
+  background-color: #334155 !important;
+}
+
+.hover\:bg-blue-100:hover {
+  background-color: #1d4ed8 !important;
+}
+
+.hover\:bg-green-50:hover {
+  background-color: #14532d !important;
+}
+
+/* Dark mode input styling */
+input, select {
+  background-color: #1e293b !important;
+  border-color: #475569 !important;
+  color: #f1f5f9 !important;
+}
+
+input::placeholder {
+  color: #64748b !important;
+}
+
+/* Dark mode shadow */
+.shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.5) !important;
+}
+
+.shadow {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5), 0 1px 2px 0 rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Responsive improvements */
+@media (max-width: 1024px) {
+  .w-80 {
+    width: 20rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .w-80 {
+    width: 100%;
+  }
+}

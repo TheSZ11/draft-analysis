@@ -1,0 +1,142 @@
+{
+  "leagueInfo": {
+    "name": "Togga kai Wafaidar",
+    "maxTeams": 10,
+    "scoringSystem": "Head-to-Head Points",
+    "season": "2025-26 EPL"
+  },
+  "rosterRequirements": {
+    "totalPlayers": {
+      "minimum": 0,
+      "maximum": 14
+    },
+    "activePlayers": {
+      "minimum": 0,
+      "maximum": 11
+    },
+    "reservePlayers": {
+      "maximum": 3
+    },
+    "injuryReservePlayers": {
+      "maximum": 1
+    },
+    "positions": {
+      "defender": {
+        "code": "D",
+        "minActive": 3,
+        "maxActive": 5,
+        "totalMax": 8
+      },
+      "midfielder": {
+        "code": "M",
+        "minActive": 3,
+        "maxActive": 5,
+        "totalMax": 8
+      },
+      "forward": {
+        "code": "F",
+        "minActive": 1,
+        "maxActive": 3,
+        "totalMax": 6
+      },
+      "goalkeeper": {
+        "code": "G",
+        "minActive": 1,
+        "maxActive": 1,
+        "totalMax": 3
+      }
+    }
+  },
+  "scoringRules": {
+    "goalkeeper": {
+      "assists_second": 2,
+      "key_passes": 2,
+      "aerials_won": 1,
+      "effective_clearances": 0.5,
+      "successful_dribbles": 1,
+      "accurate_crosses_no_corners": 1,
+      "dispossessed": -0.5,
+      "fouls_committed": -0.25,
+      "fouls_suffered": 0.25,
+      "goals": 10,
+      "own_goals": -5,
+      "interceptions": 1,
+      "goals_against": -2,
+      "high_claims_succeeded": 1,
+      "penalties": -2,
+      "penalty_kick_saves": 8,
+      "penalty_kicks_drawn": 2,
+      "red_cards": -7,
+      "saves": 2,
+      "shots_on_target": 2,
+      "clean_sheets": 8,
+      "tackles_won": 1,
+      "yellow_cards": -2,
+      "penalty_kicks_missed": -4,
+      "assists_total": 7
+    },
+    "outfielder": {
+      "default": {
+        "assists_second": 2,
+        "key_passes": 2,
+        "aerials_won": 0.5,
+        "blocked_shots": 0,
+        "ball_recoveries": 0.25,
+        "effective_clearances": 0,
+        "successful_dribbles": 1,
+        "accurate_crosses_no_corners": 1,
+        "dispossessed": -0.5,
+        "fouls_committed": -0.25,
+        "fouls_suffered": 0.25,
+        "goals": 9,
+        "goals_against_outfielders": 0,
+        "own_goals": -5,
+        "hand_balls": -0.25,
+        "interceptions": 1,
+        "offsides": -0.25,
+        "penalties": -2,
+        "penalty_kicks_drawn": 2,
+        "red_cards": -5,
+        "shots_on_target": 2,
+        "clean_sheets_on_field": 6,
+        "tackles_won": 1,
+        "yellow_cards": -2,
+        "second_yellow_cards": 0,
+        "penalty_kicks_missed": -4,
+        "assists_total": 6
+      },
+      "defender": {
+        "aerials_won": 1,
+        "blocked_shots": 1,
+        "effective_clearances": 0.5,
+        "goals": 10,
+        "goals_against_outfielders": -2,
+        "assists_total": 7
+      },
+      "midfielder": {
+        "blocked_shots": 0.5,
+        "effective_clearances": 0.25,
+        "clean_sheets_on_field": 1
+      },
+      "forward": {
+        "clean_sheets_on_field": 0
+      }
+    }
+  },
+  "additionalRules": {
+    "playoffs": {
+      "teamsQualifying": 6,
+      "rounds": 3,
+      "startPeriod": 36
+    },
+    "keeperLeague": {
+      "type": "Keeper",
+      "maximumKeepers": 1
+    },
+    "draft": {
+      "type": "Live Online Standard",
+      "rounds": 14,
+      "timeLimit": "45 seconds"
+    }
+  }
+} 
