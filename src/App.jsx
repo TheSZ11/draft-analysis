@@ -350,8 +350,7 @@ const DraftTrackerContent = () => {
                 price: 5, // Default price
                 news: ''
             };
-        }).filter(player => player.minutes > 500) // Increase filter for more reliable data
-          .sort((a, b) => b.historicalPoints - a.historicalPoints); // Sort by our new metric
+        }).sort((a, b) => b.historicalPoints - a.historicalPoints); // Sort by our new metric
 
         playerData.setAvailablePlayers(players);
         

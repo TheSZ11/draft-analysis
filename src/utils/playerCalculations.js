@@ -245,8 +245,7 @@ export const processPlayerData = (rawData) => {
       price: 5, // Default price
       news: ''
     };
-  }).filter(player => player.minutes > 500) // Filter for reliable data
-    .sort((a, b) => b.historicalPoints - a.historicalPoints); // Sort by historical points
+  }).sort((a, b) => b.historicalPoints - a.historicalPoints); // Sort by historical points
 };
 
 /**
