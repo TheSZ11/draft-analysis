@@ -140,10 +140,10 @@ describe('Minutes Prediction Model', () => {
 
   describe('calculateCompetitionFactor', () => {
     const mockPlayers = {
-      elite: { historicalPoints: 500, name: 'Elite Player' },
-      good: { historicalPoints: 300, name: 'Good Player' },
-      average: { historicalPoints: 150, name: 'Average Player' },
-      poor: { historicalPoints: 50, name: 'Poor Player' }
+      elite: { historicalPoints: 250, name: 'Elite Player' },
+      good: { historicalPoints: 180, name: 'Good Player' },
+      average: { historicalPoints: 120, name: 'Average Player' },
+      poor: { historicalPoints: 40, name: 'Poor Player' }
     };
 
     it('should give higher factors for better players', () => {
@@ -180,7 +180,7 @@ describe('Minutes Prediction Model', () => {
         position: 'F',
         team: 'MCI',
         minutes: 2500,
-        historicalPoints: 400
+        historicalPoints: 180
       },
       peakPlayer: {
         name: 'Peak Player',
@@ -220,8 +220,9 @@ describe('Minutes Prediction Model', () => {
     it('should penalize players on strong teams appropriately', () => {
       const youngStarPrediction = predictPlayerMinutes(mockPlayers.youngStar);
       
-      // Young star on City should have good but not guaranteed minutes due to competition
-      expect(youngStarPrediction.predictedMinutes).toBeGreaterThan(1800);
+      // Young star on City should have reduced minutes due to competition (180 pts vs elite team)
+      expect(youngStarPrediction.predictedMinutes).toBeGreaterThan(1200);
+      expect(youngStarPrediction.predictedMinutes).toBeLessThan(2000); // Show penalty is working
       expect(youngStarPrediction.confidence).toBeGreaterThan(0.4);
     });
 
@@ -430,7 +431,7 @@ describe('Minutes Prediction Model', () => {
       const extremeCases = [
         { name: 'Very Young', age: 18, position: 'F', team: 'MCI', minutes: 100, historicalPoints: 50 },
         { name: 'Very Old', age: 37, position: 'F', team: 'IPS', minutes: 1000, historicalPoints: 80 },
-        { name: 'Elite on Weak Team', age: 25, position: 'F', team: 'IPS', minutes: 3200, historicalPoints: 400 }
+        { name: 'Elite on Weak Team', age: 25, position: 'F', team: 'IPS', minutes: 3200, historicalPoints: 200 }
       ];
 
       extremeCases.forEach(player => {

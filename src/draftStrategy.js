@@ -1,6 +1,7 @@
 import { LEAGUE_CONFIG } from './leagueConfig.js';
 import { analyzeUpcomingFixtures, calculateEnhancedFixtureDifficulty, getTeamStrength } from './utils/fixtureAnalysis.js';
 import { predictPlayerMinutes, adjustPlayerForPredictedMinutes } from './utils/minutesPrediction.js';
+import { calculateReplacementLevels } from './utils/playerCalculations.js';
 
 // Draft Strategy Constants
 export const DRAFT_POSITIONS = {
@@ -17,11 +18,11 @@ export const ROUND_PHASES = {
 
 // Elite player thresholds based on actual data analysis
 export const PLAYER_TIERS = {
-  ELITE: { min: 500, max: 1000 },    // Lowered from 600 - top ~15 players
-  HIGH: { min: 400, max: 499 },     // Players like Haaland (404 pts)
-  MID: { min: 300, max: 399 },
-  LOW: { min: 200, max: 299 },
-  DEEP: { min: 0, max: 199 }
+  ELITE: { min: 200, max: 1000 },    // Top ~5 players (Salah 264.8 pts)
+  HIGH: { min: 150, max: 199 },      // Top performers like Haaland (161.3 pts)
+  MID: { min: 100, max: 149 },       // Solid players
+  LOW: { min: 50, max: 99 },         // Bench/rotation players
+  DEEP: { min: 0, max: 49 }          // Deep bench/minimal impact
 };
 
 // Position scarcity weights (higher = more scarce)
@@ -528,6 +529,15 @@ export const getStrategicRecommendations = (
   const positionStrategy = getDraftPositionStrategy(draftPosition, teams);
   const roundStrategy = getRoundStrategy(round, draftPosition, currentRoster);
   
+  // DYNAMIC REPLACEMENT LEVELS: Calculate based on remaining available players
+  // This ensures replacement level reflects current market conditions, not original pool
+  const dynamicReplacementLevels = calculateReplacementLevels(availablePlayers);
+  
+  // Use dynamic levels for scoring, fallback to passed levels if calculation fails
+  const activeReplacementLevels = Object.keys(dynamicReplacementLevels).length > 0 
+    ? dynamicReplacementLevels 
+    : replacementLevels;
+  
   // Special case for absolute first pick of the draft (round 1, no players drafted yet)
   const isVeryFirstPick = round === 1 && currentRoster.length === 0;
   
@@ -537,7 +547,7 @@ export const getStrategicRecommendations = (
     
     // PROPER GOALKEEPER TIMING: No goalkeepers before round 10, optimal timing rounds 10-13
     if (player.position === 'G') {
-      const vorp = calculateVORP(player, replacementLevels);
+      const vorp = calculateVORP(player, activeReplacementLevels);
       const positionNeed = rosterAnalysis.positionNeeds.G;
       const hasNoGK = positionNeed && positionNeed.current === 0;
       const hasMultipleGK = positionNeed && positionNeed.current >= 1;
@@ -580,8 +590,8 @@ export const getStrategicRecommendations = (
         }
       };
     } else if (isVeryFirstPick) {
-      // For the very first pick, use pure talent with position penalties
-      const vorp = calculateVORP(player, replacementLevels);
+      // For the very first pick, use pure talent but show full analysis
+      const vorp = calculateVORP(player, activeReplacementLevels);
       let pureScore = vorp;
       
       // Heavy penalties for non-ideal first picks
@@ -597,19 +607,24 @@ export const getStrategicRecommendations = (
         pureScore += 30;
       }
       
+      // Calculate full breakdown for display purposes (but don't weight heavily)
+      const minutesPrediction = predictPlayerMinutes(player);
+      const minutesBonus = calculateMinutesBonus(player, minutesPrediction, round) * 0.1; // Very low weight
+      const scarcityBonus = calculateScarcityBonus(player, availablePlayers, round) * 0.1; // Very low weight
+      
       scoring = {
-        totalScore: pureScore,
+        totalScore: pureScore + minutesBonus + scarcityBonus,
         breakdown: {
           talent: pureScore,
-          minutes: 0, // No minutes bonus for first pick
-          positionNeed: 0,
-          scarcity: 0,
+          minutes: minutesBonus,
+          positionNeed: 0, // Still 0 for first pick
+          scarcity: scarcityBonus,
           round: 0,
-          fixture: 0, // No fixture bonus for first pick
+          fixture: 0, // Still 0 for first pick (no fixtures context yet)
           vorp,
-          projectedMinutes: 0,
-          minutesConfidence: 0,
-          playingStatus: 'N/A'
+          projectedMinutes: minutesPrediction.predictedMinutes,
+          minutesConfidence: minutesPrediction.confidence,
+          playingStatus: minutesPrediction.playingStatus
         }
       };
     } else {
@@ -620,7 +635,7 @@ export const getStrategicRecommendations = (
         round, 
         draftPosition, 
         availablePlayers, 
-        replacementLevels,
+        activeReplacementLevels,
         fixtures
       );
     }

@@ -257,21 +257,26 @@ const PlayerListComponent = ({ draftPlayer }) => {
         </div>
         
         <div className="overflow-y-auto max-h-[calc(100vh-16rem)] lg:max-h-[calc(100vh-12rem)]">
-          <div className="divide-y divide-slate-700">
-            {(recommendations || []).slice(0, 12).map((rec, index) => (
+          <div className="space-y-3 p-4">
+            {(recommendations || []).slice(0, 8).map((rec, index) => (
               <div
                 key={rec.name}
-                className="p-3 hover:bg-green-900/50 cursor-pointer transition-colors"
+                className="bg-slate-800 rounded-lg border border-slate-600 hover:border-green-500 cursor-pointer transition-all duration-200 hover:shadow-lg"
                 onClick={() => draftPlayer(rec)}
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-sm font-medium text-slate-400 w-6">#{index + 1}</span>
+                {/* Header */}
+                <div className="p-4 border-b border-slate-600">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start space-x-3">
+                      <div className="flex-shrink-0">
+                        <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-green-900/50 text-green-300 text-sm font-bold">
+                          {index + 1}
+                        </span>
+                      </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center space-x-2">
-                          <h4 className="font-semibold text-slate-100 truncate">{rec.name}</h4>
-                          <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                        <div className="flex items-center space-x-2 mb-1">
+                          <h3 className="text-lg font-bold text-slate-100 truncate">{rec.name}</h3>
+                          <span className={`px-2 py-1 rounded text-sm font-medium ${
                             rec.position === 'F' ? 'bg-red-900/50 text-red-300' :
                             rec.position === 'M' ? 'bg-green-900/50 text-green-300' :
                             rec.position === 'D' ? 'bg-blue-900/50 text-blue-300' :
@@ -280,7 +285,7 @@ const PlayerListComponent = ({ draftPlayer }) => {
                             {rec.position}
                           </span>
                           {rec.tier && (
-                            <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${
+                            <span className={`px-2 py-1 rounded text-sm font-medium ${
                               rec.tier === 'ELITE' ? 'bg-purple-900/50 text-purple-300' :
                               rec.tier === 'HIGH' ? 'bg-blue-900/50 text-blue-300' :
                               rec.tier === 'MID' ? 'bg-green-900/50 text-green-300' :
@@ -290,25 +295,145 @@ const PlayerListComponent = ({ draftPlayer }) => {
                             </span>
                           )}
                         </div>
-                        <div className="text-sm text-slate-400 mt-1">{rec.team} • Age: {rec.age}</div>
-                        <div className="text-xs text-green-400 mt-1 truncate">{rec.recommendation}</div>
-                        {rec.scoring && (
-                          <div className="flex items-center space-x-3 text-xs text-slate-500 mt-1">
-                            <span>Talent: {(rec.scoring.talent || 0).toFixed(0)}</span>
-                            <span>Need: {(rec.scoring.positionNeed || 0).toFixed(0)}</span>
-                            <span>Scarcity: {(rec.scoring.scarcity || 0).toFixed(0)}</span>
+                        <div className="text-sm text-slate-400">
+                          {rec.team} • Age: {rec.age} • {rec.historicalPoints || 0} pts
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xl font-bold text-green-400">
+                        {rec.strategicScore?.toFixed(0) || rec.score?.toFixed(0) || '0'}
+                      </div>
+                      <div className="text-xs text-slate-400">Score</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Main Recommendation */}
+                <div className="px-4 py-3 bg-slate-800/50">
+                  <div className="text-sm text-green-400 font-medium">
+                    {rec.recommendation}
+                  </div>
+                </div>
+
+                {/* Detailed Breakdown */}
+                {rec.scoring && (
+                  <div className="p-4 space-y-3">
+                    {/* Scoring Breakdown */}
+                    <div>
+                      <h4 className="text-xs font-semibold text-slate-300 mb-2 uppercase tracking-wide">Scoring Breakdown</h4>
+                      <div className="grid grid-cols-3 gap-2">
+                        <div className="text-center">
+                          <div className="text-sm font-medium text-slate-100">
+                            {(rec.scoring.talent || 0).toFixed(0)}
+                          </div>
+                          <div className="text-xs text-slate-400">Talent</div>
+                        </div>
+                        {rec.scoring.minutes !== undefined && (
+                          <div className="text-center">
+                            <div className={`text-sm font-medium ${
+                              (rec.scoring.minutes || 0) > 10 ? 'text-green-400' :
+                              (rec.scoring.minutes || 0) < -10 ? 'text-red-400' :
+                              'text-slate-100'
+                            }`}>
+                              {rec.scoring.minutes > 0 ? '+' : ''}{(rec.scoring.minutes || 0).toFixed(0)}
+                            </div>
+                            <div className="text-xs text-slate-400">Minutes</div>
                           </div>
                         )}
+                        <div className="text-center">
+                          <div className={`text-sm font-medium ${
+                            (rec.scoring.positionNeed || 0) > 5 ? 'text-green-400' :
+                            'text-slate-100'
+                          }`}>
+                            {rec.scoring.positionNeed > 0 ? '+' : ''}{(rec.scoring.positionNeed || 0).toFixed(0)}
+                          </div>
+                          <div className="text-xs text-slate-400">Need</div>
+                        </div>
+                        <div className="text-center">
+                          <div className={`text-sm font-medium ${
+                            (rec.scoring.scarcity || 0) > 5 ? 'text-yellow-400' :
+                            'text-slate-100'
+                          }`}>
+                            {rec.scoring.scarcity > 0 ? '+' : ''}{(rec.scoring.scarcity || 0).toFixed(0)}
+                          </div>
+                          <div className="text-xs text-slate-400">Scarcity</div>
+                        </div>
+                        {rec.scoring.fixture !== undefined && (
+                          <div className="text-center">
+                            <div className={`text-sm font-medium ${
+                              (rec.scoring.fixture || 0) > 5 ? 'text-green-400' :
+                              (rec.scoring.fixture || 0) < -5 ? 'text-red-400' :
+                              'text-slate-100'
+                            }`}>
+                              {rec.scoring.fixture > 0 ? '+' : ''}{(rec.scoring.fixture || 0).toFixed(0)}
+                            </div>
+                            <div className="text-xs text-slate-400">Fixtures</div>
+                          </div>
+                        )}
+                        <div className="text-center">
+                          <div className={`text-sm font-medium ${
+                            (rec.scoring.round || 0) > 0 ? 'text-green-400' :
+                            (rec.scoring.round || 0) < 0 ? 'text-red-400' :
+                            'text-slate-100'
+                          }`}>
+                            {rec.scoring.round > 0 ? '+' : ''}{(rec.scoring.round || 0).toFixed(0)}
+                          </div>
+                          <div className="text-xs text-slate-400">Round</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Minutes Prediction */}
+                    {rec.scoring.playingStatus && rec.scoring.playingStatus !== 'N/A' && (
+                      <div>
+                        <h4 className="text-xs font-semibold text-slate-300 mb-2 uppercase tracking-wide">Minutes Projection</h4>
+                        <div className="flex items-center justify-between text-sm">
+                          <div className="flex items-center space-x-2">
+                            <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
+                              rec.scoring.playingStatus === 'starter' ? 'bg-green-900/50 text-green-300' :
+                              rec.scoring.playingStatus === 'regular' ? 'bg-blue-900/50 text-blue-300' :
+                              rec.scoring.playingStatus === 'rotation' ? 'bg-yellow-900/50 text-yellow-300' :
+                              'bg-red-900/50 text-red-300'
+                            }`}>
+                              {rec.scoring.playingStatus}
+                            </span>
+                            <span className="text-slate-400">
+                              {Math.round((rec.scoring.projectedMinutes || 0) / 38)} min/game
+                            </span>
+                          </div>
+                          <div className="text-xs text-slate-500">
+                            {Math.round((rec.scoring.minutesConfidence || 0) * 100)}% confidence
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Performance Metrics */}
+                    <div>
+                      <h4 className="text-xs font-semibold text-slate-300 mb-2 uppercase tracking-wide">Performance</h4>
+                      <div className="flex items-center justify-between text-sm">
+                        <div>
+                          <span className="text-slate-400">VORP:</span>
+                          <span className={`ml-1 font-medium ${
+                            (rec.vorp || 0) > 100 ? 'text-green-400' :
+                            (rec.vorp || 0) > 50 ? 'text-blue-400' :
+                            (rec.vorp || 0) > 0 ? 'text-slate-100' :
+                            'text-red-400'
+                          }`}>
+                            {(rec.vorp || 0).toFixed(0)}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-slate-400">FP/90:</span>
+                          <span className="ml-1 text-slate-100 font-medium">
+                            {rec.fp90 ? rec.fp90.toFixed(1) : 'N/A'}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  
-                  <div className="text-right ml-4 flex-shrink-0">
-                    <div className="text-lg font-bold text-green-400">{rec.strategicScore?.toFixed(0) || rec.score?.toFixed(0) || '0'}</div>
-                    <div className="text-sm text-purple-400">{rec.vorp?.toFixed(1) || '0.0'}</div>
-                    <div className="text-xs text-slate-400">Score</div>
-                  </div>
-                </div>
+                )}
               </div>
             ))}
           </div>

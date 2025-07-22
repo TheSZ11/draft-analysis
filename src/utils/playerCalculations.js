@@ -93,9 +93,12 @@ export const calculateReplacementLevels = (players) => {
       return;
     }
     
-    // Define replacement level as the 12th best player at each position
-    // For smaller leagues, adjust this number (e.g., 8th for 8-team leagues)
-    const replacementIndex = Math.min(12, positionPlayers.length - 1);
+    // Define replacement level as a player you could reasonably expect to be available
+    // Use 15% depth for larger pool, minimum 12th player for smaller pools  
+    const replacementIndex = Math.min(
+      Math.max(12, Math.floor(positionPlayers.length * 0.15)), 
+      positionPlayers.length - 1
+    );
     levels[pos] = positionPlayers[replacementIndex]?.historicalPoints || 0;
   });
   
