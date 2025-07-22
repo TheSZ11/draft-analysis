@@ -263,8 +263,6 @@ const PlayerListComponent = ({ draftPlayer }) => {
                 key={rec.name}
                 className="p-3 hover:bg-green-900/50 cursor-pointer transition-colors"
                 onClick={() => draftPlayer(rec)}
-                onMouseEnter={(e) => handlePlayerHover(rec, e)}
-                onMouseLeave={clearPlayerHover}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1 min-w-0">

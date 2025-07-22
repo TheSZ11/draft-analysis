@@ -71,7 +71,8 @@ export const usePlayerData = () => {
     draftPosition, 
     availablePlayersList, 
     levels, 
-    totalTeams = 10
+    totalTeams = 10,
+    fixtures = null
   ) => {
     try {
       return getStratRecs(
@@ -80,7 +81,8 @@ export const usePlayerData = () => {
         draftPosition,
         availablePlayersList,
         levels,
-        totalTeams
+        totalTeams,
+        fixtures
       );
     } catch (error) {
       console.error('Error getting strategic recommendations:', error);

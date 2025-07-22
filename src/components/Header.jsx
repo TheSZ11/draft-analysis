@@ -7,9 +7,11 @@ import { useDraftContext, usePlayerContext } from '../contexts/index.js';
  * Now uses React Context instead of prop drilling with performance optimizations
  * @param {Object} props
  * @param {Object} props.currentTeam - Temporary prop for current team (will be moved to context later)
+ * @param {Function} props.startDraft - Function to start manual draft
+ * @param {Function} props.resetDraft - Function to reset manual draft
  * @returns {JSX.Element}
  */
-const HeaderComponent = ({ currentTeam }) => {
+const HeaderComponent = ({ currentTeam, startDraft, resetDraft }) => {
   // Get data from contexts instead of props
   const {
     currentPick,
@@ -35,6 +37,10 @@ const HeaderComponent = ({ currentTeam }) => {
       currentRound
     };
   }, [currentPick, teams.length]);
+
+  // Determine if draft is active
+  const isDraftActive = teams.length > 0;
+  const hasNoTeams = teams.length === 0;
   return (
     <header className="bg-slate-800 shadow-sm border-b border-slate-700 sticky top-0 z-10">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
@@ -88,40 +94,73 @@ const HeaderComponent = ({ currentTeam }) => {
               </>
             ) : (
               <>
-                <div className="flex items-center space-x-2 text-sm">
-                  <span className="text-slate-400 hidden sm:inline">Progress:</span>
-                  <div className="flex items-center space-x-1">
-                    <div className="w-16 sm:w-20 lg:w-32 bg-slate-600 rounded-full h-2">
-                      <div 
-                        className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
-                        style={{ width: `${draftProgress.progressPercent}%` }}
-                      ></div>
+                {isDraftActive ? (
+                  <>
+                    <div className="flex items-center space-x-2 text-sm">
+                      <span className="text-blue-400 font-medium">MANUAL DRAFT</span>
+                      <span className="text-slate-400 hidden sm:inline">Progress:</span>
+                      <div className="flex items-center space-x-1">
+                        <div className="w-16 sm:w-20 lg:w-32 bg-slate-600 rounded-full h-2">
+                          <div 
+                            className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+                            style={{ width: `${draftProgress.progressPercent}%` }}
+                          ></div>
+                        </div>
+                        <span className="text-xs text-slate-400">
+                          {draftProgress.progressPercent}%
+                        </span>
+                      </div>
                     </div>
-                    <span className="text-xs text-slate-400">
-                      {draftProgress.progressPercent}%
-                    </span>
-                  </div>
-                </div>
-                
-                {currentTeam && (
-                  <div className="flex items-center space-x-2 text-sm">
-                    <span className="text-slate-400 hidden sm:inline">Current:</span>
-                    <span className={`font-medium px-2 lg:px-3 py-1 rounded-full text-xs lg:text-sm ${
-                      currentTeam.id === 1 
-                        ? 'bg-blue-700 text-blue-200' 
-                        : 'bg-slate-600 text-slate-200'
-                    }`}>
-                      {currentTeam.name}
-                    </span>
-                  </div>
+                    
+                    {currentTeam && (
+                      <div className="flex items-center space-x-2 text-sm">
+                        <span className="text-slate-400 hidden sm:inline">Current:</span>
+                        <span className={`font-medium px-2 lg:px-3 py-1 rounded-full text-xs lg:text-sm ${
+                          currentTeam.id === 1 
+                            ? 'bg-blue-700 text-blue-200' 
+                            : 'bg-slate-600 text-slate-200'
+                        }`}>
+                          {currentTeam.name}
+                        </span>
+                      </div>
+                    )}
+                    
+                    <button
+                      onClick={() => resetDraft && resetDraft()}
+                      className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs rounded-lg transition-colors"
+                    >
+                      Reset Draft
+                    </button>
+                    <button
+                      onClick={() => startSimulation()}
+                      className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-xs rounded-lg transition-colors"
+                    >
+                      Start Simulation
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-center space-x-2 text-sm">
+                      <span className="text-slate-400">Ready to Draft</span>
+                      <span className="text-slate-500 text-xs">No active draft</span>
+                    </div>
+                    
+                    <button
+                      onClick={() => startDraft && startDraft()}
+                      disabled={availablePlayers.length === 0}
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 disabled:cursor-not-allowed text-white text-sm rounded-lg transition-colors font-medium"
+                      title={availablePlayers.length === 0 ? "Loading players..." : "Start manual draft"}
+                    >
+                      {availablePlayers.length === 0 ? 'Loading Players...' : 'Start Draft'}
+                    </button>
+                    <button
+                      onClick={() => startSimulation()}
+                      className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-xs rounded-lg transition-colors"
+                    >
+                      Start Simulation
+                    </button>
+                  </>
                 )}
-                
-                <button
-                  onClick={() => startSimulation()}
-                  className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-xs rounded-lg transition-colors"
-                >
-                  Start Simulation
-                </button>
               </>
             )}
           </div>

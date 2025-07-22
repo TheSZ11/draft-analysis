@@ -1,4 +1,6 @@
 import { LEAGUE_CONFIG } from './leagueConfig.js';
+import { analyzeUpcomingFixtures, calculateEnhancedFixtureDifficulty, getTeamStrength } from './utils/fixtureAnalysis.js';
+import { predictPlayerMinutes, adjustPlayerForPredictedMinutes } from './utils/minutesPrediction.js';
 
 // Draft Strategy Constants
 export const DRAFT_POSITIONS = {
@@ -270,34 +272,56 @@ export const calculatePositionNeedScore = (position, rosterAnalysis, round, draf
   return needScore * needWeight;
 };
 
-// Enhanced recommendation scoring
-export const calculateAdvancedPlayerScore = (player, rosterAnalysis, round, draftPosition, availablePlayers, replacementLevels) => {
-  // Base talent score - higher weight for early rounds
-  const vorp = calculateVORP(player, replacementLevels);
-  const talentWeight = round <= 2 ? 0.85 : round <= 4 ? 0.75 : 0.7; // Higher for early picks
+// Enhanced recommendation scoring with fixture analysis and minutes prediction
+export const calculateAdvancedPlayerScore = (player, rosterAnalysis, round, draftPosition, availablePlayers, replacementLevels, fixtures = null) => {
+  // NEW: Minutes prediction - predict playing time for more accurate projections
+  const minutesPrediction = predictPlayerMinutes(player);
+  const adjustedStats = adjustPlayerForPredictedMinutes(player, minutesPrediction);
+  
+  // Use adjusted points for VORP calculation when minutes prediction is confident
+  const useAdjustedPoints = minutesPrediction.confidence > 0.6;
+  const effectivePoints = useAdjustedPoints ? adjustedStats.adjustedPoints : player.historicalPoints;
+  
+  // Base talent score - use minutes-adjusted points for more accuracy
+  const vorp = (effectivePoints || 0) - (replacementLevels[player.position] || 0);
+  const talentWeight = round <= 2 ? 0.80 : round <= 4 ? 0.70 : 0.65; // Slightly reduced to make room for minutes factor
   const talentScore = vorp * talentWeight;
   
+  // NEW: Minutes prediction bonus/penalty - crucial for late-round picks
+  const minutesWeight = round <= 4 ? 0.05 : round <= 8 ? 0.10 : 0.15; // Higher weight in later rounds
+  const minutesBonus = calculateMinutesBonus(player, minutesPrediction, round) * minutesWeight;
+  
   // Position need score - reasonable scaling for later rounds
-  const positionWeight = round <= 2 ? 0.05 : round <= 4 ? 0.1 : round <= 8 ? 0.2 : 0.3;
+  const positionWeight = round <= 2 ? 0.05 : round <= 4 ? 0.1 : round <= 8 ? 0.15 : 0.20; // Slightly reduced
   const positionNeedScore = calculatePositionNeedScore(player.position, rosterAnalysis, round, draftPosition) * positionWeight;
   
   // Scarcity bonus - consistent weight
-  const scarcityBonus = calculateScarcityBonus(player, availablePlayers, round) * 0.1;
+  const scarcityBonus = calculateScarcityBonus(player, availablePlayers, round) * 0.08; // Slightly reduced
   
   // Round-specific bonus - higher impact for early rounds
-  const roundWeight = round <= 2 ? 0.1 : round <= 4 ? 0.08 : 0.05;
+  const roundWeight = round <= 2 ? 0.08 : round <= 4 ? 0.06 : 0.04; // Slightly reduced
   const roundBonus = calculateRoundSpecificBonus(player, round, rosterAnalysis) * roundWeight;
   
-  const totalScore = talentScore + positionNeedScore + scarcityBonus + roundBonus;
+  // Fixture difficulty bonus - becomes more important in later rounds
+  const fixtureWeight = round <= 4 ? 0.04 : round <= 8 ? 0.08 : 0.12; // Slightly reduced
+  const fixtureBonus = calculateFixtureBonus(player, fixtures, round) * fixtureWeight;
+  
+  const totalScore = talentScore + minutesBonus + positionNeedScore + scarcityBonus + roundBonus + fixtureBonus;
   
   return {
     totalScore,
     breakdown: {
       talent: talentScore,
+      minutes: minutesBonus,
       positionNeed: positionNeedScore,
       scarcity: scarcityBonus,
       round: roundBonus,
-      vorp
+      fixture: fixtureBonus,
+      vorp,
+      // Additional context
+      projectedMinutes: minutesPrediction.predictedMinutes,
+      minutesConfidence: minutesPrediction.confidence,
+      playingStatus: minutesPrediction.playingStatus
     }
   };
 };
@@ -384,6 +408,112 @@ export const calculateRoundSpecificBonus = (player, round, rosterAnalysis) => {
   return bonus;
 };
 
+// Calculate minutes prediction bonus/penalty for a player
+export const calculateMinutesBonus = (player, minutesPrediction, round) => {
+  if (!minutesPrediction || round <= 2) {
+    return 0; // No minutes adjustment for very early picks
+  }
+  
+  const { predictedMinutes, minutesPerGame, confidence, playingStatus } = minutesPrediction;
+  
+  // Base bonus/penalty based on projected playing time
+  let minutesScore = 0;
+  
+  // Playing status bonuses/penalties
+  switch (playingStatus) {
+    case 'starter': // 70+ minutes per game
+      minutesScore = 25;
+      break;
+    case 'regular': // 50-70 minutes per game  
+      minutesScore = 15;
+      break;
+    case 'rotation': // 30-50 minutes per game
+      minutesScore = -5;
+      break;
+    case 'fringe': // <30 minutes per game
+      minutesScore = -25;
+      break;
+    default:
+      minutesScore = 0;
+  }
+  
+  // Additional adjustment based on actual projected minutes
+  if (predictedMinutes > 2800) { // 74+ min/game
+    minutesScore += 10;
+  } else if (predictedMinutes > 2500) { // 66+ min/game
+    minutesScore += 5;
+  } else if (predictedMinutes < 1800) { // <47 min/game
+    minutesScore -= 15;
+  } else if (predictedMinutes < 1200) { // <32 min/game
+    minutesScore -= 30;
+  }
+  
+  // Scale bonus by confidence - low confidence predictions get smaller impact
+  minutesScore *= confidence;
+  
+  // Later rounds care more about minutes certainty
+  if (round >= 8) {
+    // Penalty for uncertain minutes in late rounds
+    if (confidence < 0.6) {
+      minutesScore -= 10;
+    }
+  }
+  
+  // Cap the minutes bonus to prevent it from overwhelming other factors
+  return Math.max(-40, Math.min(35, Math.round(minutesScore * 10) / 10));
+};
+
+// Calculate fixture-based bonus for a player
+export const calculateFixtureBonus = (player, fixtures, round) => {
+  // Early rounds: fixtures matter less since we're focusing on talent
+  if (round <= 3 || !fixtures || !player.team) {
+    return 0;
+  }
+  
+  // Get team fixtures for the player's team
+  const teamFixtures = fixtures[player.team];
+  if (!Array.isArray(teamFixtures) || teamFixtures.length === 0) {
+    return 0;
+  }
+  
+  try {
+    // Analyze upcoming fixtures for this player's position
+    const fixtureAnalysis = analyzeUpcomingFixtures(
+      teamFixtures.map(fixture => ({
+        ...fixture,
+        team: player.team // Ensure team code is included
+      })),
+      player.position,
+      6 // Look at next 6 gameweeks
+    );
+    
+    // Base fixture score ranges from -8 to +8
+    let fixtureBonus = fixtureAnalysis.fixtureScore;
+    
+    // Position-specific adjustments
+    if (player.position === 'D' || player.position === 'G') {
+      // Defenders and goalkeepers benefit more from easy fixtures (clean sheets)
+      fixtureBonus += fixtureAnalysis.cleanSheetExpected * 10; // Up to 8 extra points for high clean sheet probability
+    } else if (player.position === 'F') {
+      // Forwards benefit more from attacking opportunities
+      fixtureBonus += fixtureAnalysis.attackingExpected * 8; // Up to ~12 extra points for high attacking potential
+    } else if (player.position === 'M') {
+      // Midfielders benefit from both but to a lesser extent
+      fixtureBonus += (fixtureAnalysis.cleanSheetExpected * 3) + (fixtureAnalysis.attackingExpected * 5);
+    }
+    
+    // Scale bonus based on confidence
+    fixtureBonus *= fixtureAnalysis.confidence;
+    
+    // Cap the fixture bonus to prevent it from overwhelming other factors
+    return Math.max(-20, Math.min(25, Math.round(fixtureBonus * 10) / 10));
+    
+  } catch (error) {
+    console.warn(`Error calculating fixture bonus for ${player.name}:`, error);
+    return 0;
+  }
+};
+
 // Get strategic recommendations for current pick
 export const getStrategicRecommendations = (
   currentRoster, 
@@ -391,7 +521,8 @@ export const getStrategicRecommendations = (
   draftPosition, 
   availablePlayers, 
   replacementLevels,
-  teams = 10
+  teams = 10,
+  fixtures = null
 ) => {
   const rosterAnalysis = analyzeRosterComposition(currentRoster, round);
   const positionStrategy = getDraftPositionStrategy(draftPosition, teams);
@@ -428,14 +559,24 @@ export const getStrategicRecommendations = (
         positionBonusScore = 50; // Stronger bonus for urgency
       }
       
+      // Add fixture and minutes bonus for goalkeepers in later rounds
+      const fixtureBonus = calculateFixtureBonus(player, fixtures, round);
+      const minutesPrediction = predictPlayerMinutes(player);
+      const minutesBonus = calculateMinutesBonus(player, minutesPrediction, round);
+      
       scoring = {
-        totalScore: vorp + penaltyScore + positionBonusScore,
+        totalScore: vorp + penaltyScore + positionBonusScore + fixtureBonus + minutesBonus,
         breakdown: {
           talent: vorp,
+          minutes: minutesBonus,
           positionNeed: positionBonusScore,
           scarcity: 0,
           round: penaltyScore,
-          vorp
+          fixture: fixtureBonus,
+          vorp,
+          projectedMinutes: minutesPrediction.predictedMinutes,
+          minutesConfidence: minutesPrediction.confidence,
+          playingStatus: minutesPrediction.playingStatus
         }
       };
     } else if (isVeryFirstPick) {
@@ -460,10 +601,15 @@ export const getStrategicRecommendations = (
         totalScore: pureScore,
         breakdown: {
           talent: pureScore,
+          minutes: 0, // No minutes bonus for first pick
           positionNeed: 0,
           scarcity: 0,
           round: 0,
-          vorp
+          fixture: 0, // No fixture bonus for first pick
+          vorp,
+          projectedMinutes: 0,
+          minutesConfidence: 0,
+          playingStatus: 'N/A'
         }
       };
     } else {
@@ -474,7 +620,8 @@ export const getStrategicRecommendations = (
         round, 
         draftPosition, 
         availablePlayers, 
-        replacementLevels
+        replacementLevels,
+        fixtures
       );
     }
     
@@ -526,6 +673,28 @@ export const generateRecommendationReason = (player, rosterAnalysis, round, scor
   // Scarcity reasons
   if (scoring.scarcity > 8) {
     reasons.push(`Limited quality ${player.position}s remaining`);
+  }
+  
+  // Minutes prediction reasons (NEW)
+  if (scoring.minutes > 15) {
+    reasons.push(`💪 Guaranteed starter (${scoring.playingStatus})`);
+  } else if (scoring.minutes > 5) {
+    reasons.push(`✅ Regular minutes expected`);
+  } else if (scoring.minutes < -15) {
+    reasons.push(`⚠️ Limited playing time risk`);
+  } else if (scoring.minutes < -5) {
+    reasons.push(`🔶 Rotation/bench player`);
+  }
+
+  // Fixture-based reasons
+  if (scoring.fixture > 10) {
+    reasons.push(`🟢 Excellent upcoming fixtures`);
+  } else if (scoring.fixture > 5) {
+    reasons.push(`✅ Good fixture run`);
+  } else if (scoring.fixture < -10) {
+    reasons.push(`🔴 Difficult fixtures ahead`);
+  } else if (scoring.fixture < -5) {
+    reasons.push(`⚠️ Tough upcoming matches`);
   }
   
   // Round-specific reasons

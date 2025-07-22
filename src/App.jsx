@@ -262,7 +262,8 @@ const DraftTrackerContent = () => {
       draftPosition,
       available.filter(p => !p.isPositionFull), // Only include draftable players
       replacementLevels,
-      isSimulationMode ? 10 : teams.length
+      isSimulationMode ? 10 : teams.length,
+      fixtures // Pass fixtures for enhanced difficulty analysis
     );
 
     return strategicRecs?.recommendations || [];
@@ -398,8 +399,13 @@ const DraftTrackerContent = () => {
   }, [availablePlayers, draftedPlayers]);
 
   const getCurrentTeam = useCallback(() => {
-    return getCurrentDraftTeam(isSimulationMode, userDraftPosition, simulationTeams);
-  }, [isSimulationMode, userDraftPosition, simulationTeams]);
+    if (isSimulationMode) {
+      return getCurrentDraftTeam(isSimulationMode, userDraftPosition, simulationTeams);
+    } else {
+      // Manual mode: use the teams from draft state
+      return getCurrentDraftTeam(false, 1, teams);
+    }
+  }, [isSimulationMode, userDraftPosition, simulationTeams, teams]);
 
   const showTeamComplianceReport = useCallback((team) => {
     const report = generateComplianceReport(team);
@@ -441,7 +447,7 @@ const DraftTrackerContent = () => {
       
       simulation.setSimulationTeams(updatedUserTeam);
       playerData.setAvailablePlayers(prev => prev.filter(p => p.id !== player.id));
-      draftState.setDraftedPlayers(prev => [...prev, player]);
+      draftState.setDraftedPlayers(prev => [...prev, player.name]);
       draftState.setCurrentPick(prev => prev + 1);
       ui.setForceUpdate(prev => prev + 1);
       
@@ -461,7 +467,11 @@ const DraftTrackerContent = () => {
     } else {
       // Handle normal mode drafting
       const currentTeam = getCurrentTeam();
-      if (!currentTeam) return;
+      
+      if (!currentTeam) {
+        alert('Please start a draft first by clicking "Start Draft"');
+        return;
+      }
 
       // Comprehensive draft validation
       const draftValidation = validateDraftMove(currentTeam, player);
@@ -490,6 +500,7 @@ const DraftTrackerContent = () => {
       draftState.setTeams(updatedTeams);
       draftState.setDraftedPlayers([...draftedPlayers, player.name]);
       draftState.setCurrentPick(currentPick + 1);
+      playerData.setAvailablePlayers(prev => prev.filter(p => p.id !== player.id));
     }
   };
 
@@ -632,7 +643,7 @@ const DraftTrackerContent = () => {
       });
       
               playerData.setAvailablePlayers(prev => prev.filter(p => p.id !== selectedPlayer.id));
-        draftState.setDraftedPlayers(prev => [...prev, selectedPlayer]);
+        draftState.setDraftedPlayers(prev => [...prev, selectedPlayer.name]);
         draftState.setCurrentPick(prev => prev + 1);
         ui.setForceUpdate(prev => prev + 1); // Force re-render
       
@@ -691,6 +702,48 @@ const DraftTrackerContent = () => {
     playerData.initializePlayerData();
   };
 
+  // Start manual draft mode
+  const startDraft = () => {
+    console.log('Starting manual draft...');
+    
+    // Create teams for manual draft (typically 10-12 teams)
+    const teamCount = 10;
+    const manualTeams = [];
+    
+    for (let i = 1; i <= teamCount; i++) {
+      const team = createTeamTemplate(i, i === 1 ? 'Your Team' : `Team ${i}`);
+      manualTeams.push(team);
+    }
+    
+    console.log('Manual draft teams created:', manualTeams.length);
+    
+    // Initialize draft state
+    draftState.initializeTeamsForDraft(manualTeams);
+    
+    // Reset other states
+    draftState.setCurrentPick(1);
+    draftState.setDraftedPlayers([]);
+    ui.resetUIState();
+    
+    console.log('Manual draft initialized successfully');
+  };
+  
+  // Reset manual draft
+  const resetDraft = () => {
+    console.log('Resetting manual draft...');
+    
+    // Reset draft state
+    draftState.resetDraft();
+    
+    // Reset UI state
+    ui.resetUIState();
+    
+    // Re-initialize player data
+    playerData.initializePlayerData();
+    
+    console.log('Manual draft reset complete');
+  };
+
   const currentTeam = getCurrentTeam();
   
   // Pure calculation for recommendations without side effects
@@ -700,7 +753,7 @@ const DraftTrackerContent = () => {
 
   // Handle strategic data updates in useEffect to avoid setState during render
   React.useEffect(() => {
-    if (currentTeam && currentTeam.picks) {
+    if (currentTeam && currentTeam.picks !== undefined) {
       const currentRound = Math.floor((currentPick - 1) / (isSimulationMode ? 10 : teams.length)) + 1;
       const draftPosition = isSimulationMode ? userDraftPosition : 1;
       const available = getAvailablePlayers().filter(p => !p.isPositionFull);
@@ -711,7 +764,8 @@ const DraftTrackerContent = () => {
         draftPosition,
         available,
         replacementLevels,
-        isSimulationMode ? 10 : teams.length
+        isSimulationMode ? 10 : teams.length,
+        fixtures // Pass fixtures for enhanced difficulty analysis
       );
       
       playerData.setStrategicData(strategicInfo);
@@ -765,7 +819,7 @@ const DraftTrackerContent = () => {
       // Update React state immediately for real-time UI updates
       simulation.setSimulationTeams([...updatedTeams]);
       playerData.setAvailablePlayers([...updatedAvailablePlayers]);
-      draftState.setDraftedPlayers(prev => [...prev, aiPick]);
+      draftState.setDraftedPlayers(prev => [...prev, aiPick.name]);
       draftState.setCurrentPick(pick + 1);
       ui.setForceUpdate(prev => prev + 1);
       
@@ -971,6 +1025,8 @@ const DraftTrackerContent = () => {
       {/* Header */}
       <Header 
         currentTeam={getCurrentTeam()}
+        startDraft={startDraft}
+        resetDraft={resetDraft}
       />
 
       {/* Main Content */}

@@ -614,4 +614,196 @@ describe('Draft Flow Integration Tests', () => {
       expect(screen.getByTestId('valid-players')).toHaveTextContent('Valid: 1')
     })
   })
+
+  // Add tests for manual draft start functionality
+  describe('Manual Draft Start Functionality', () => {
+    it('should initialize teams when starting manual draft', async () => {
+      const user = userEvent.setup()
+      const mockStartDraft = vi.fn(() => {
+        // Simulate creating 10 teams
+        const teams = []
+        for (let i = 1; i <= 10; i++) {
+          teams.push({
+            id: i,
+            name: i === 1 ? 'Your Team' : `Team ${i}`,
+            picks: [],
+            maxTotalPlayers: 15
+          })
+        }
+        return teams
+      })
+
+      // Mock the component that would show start draft button
+      const TestDraftStart = () => {
+        const [draftStarted, setDraftStarted] = React.useState(false)
+        const [teams, setTeams] = React.useState([])
+
+        const handleStartDraft = () => {
+          const newTeams = mockStartDraft()
+          setTeams(newTeams)
+          setDraftStarted(true)
+        }
+
+        return (
+          <div>
+            {!draftStarted ? (
+              <button onClick={handleStartDraft} data-testid="start-draft">
+                Start Draft
+              </button>
+            ) : (
+              <div>
+                <span data-testid="draft-active">Draft Active</span>
+                <span data-testid="team-count">{teams.length} teams</span>
+                <span data-testid="user-team">{teams[0]?.name}</span>
+              </div>
+            )}
+          </div>
+        )
+      }
+
+      render(<TestDraftStart />)
+
+      // Initially should show start draft button
+      expect(screen.getByTestId('start-draft')).toBeInTheDocument()
+
+      // Click start draft
+      await user.click(screen.getByTestId('start-draft'))
+
+      // Should initialize teams and show draft as active
+      expect(mockStartDraft).toHaveBeenCalledTimes(1)
+      expect(screen.getByTestId('draft-active')).toBeInTheDocument()
+      expect(screen.getByTestId('team-count')).toHaveTextContent('10 teams')
+      expect(screen.getByTestId('user-team')).toHaveTextContent('Your Team')
+    })
+
+    it('should reset draft state when reset is called', async () => {
+      const user = userEvent.setup()
+      const mockResetDraft = vi.fn()
+
+      // Mock component that simulates draft reset
+      const TestDraftReset = () => {
+        const [draftActive, setDraftActive] = React.useState(true)
+        const [teams, setTeams] = React.useState([
+          { id: 1, name: 'Your Team', picks: [{ name: 'Player 1' }] }
+        ])
+
+        const handleReset = () => {
+          mockResetDraft()
+          setDraftActive(false)
+          setTeams([])
+        }
+
+        return (
+          <div>
+            {draftActive ? (
+              <div>
+                <span data-testid="draft-active">Draft Active</span>
+                <span data-testid="picks-count">{teams[0]?.picks.length} picks</span>
+                <button onClick={handleReset} data-testid="reset-draft">
+                  Reset Draft
+                </button>
+              </div>
+            ) : (
+              <span data-testid="no-draft">No Draft Active</span>
+            )}
+          </div>
+        )
+      }
+
+      render(<TestDraftReset />)
+
+      // Should initially show active draft
+      expect(screen.getByTestId('draft-active')).toBeInTheDocument()
+      expect(screen.getByTestId('picks-count')).toHaveTextContent('1 picks')
+
+      // Click reset
+      await user.click(screen.getByTestId('reset-draft'))
+
+      // Should reset and clear state
+      expect(mockResetDraft).toHaveBeenCalledTimes(1)
+      expect(screen.getByTestId('no-draft')).toBeInTheDocument()
+    })
+
+    it('should properly transition between no draft, manual draft, and simulation modes', async () => {
+      const user = userEvent.setup()
+      
+      // Test component that simulates mode transitions
+      const TestModeTransitions = () => {
+        const [mode, setMode] = React.useState('none') // none, manual, simulation
+        const [teams, setTeams] = React.useState([])
+
+        const startManualDraft = () => {
+          setMode('manual')
+          setTeams([{ id: 1, name: 'Your Team', picks: [] }])
+        }
+
+        const startSimulation = () => {
+          setMode('simulation')
+          setTeams([{ id: 1, name: 'Your Team', picks: [] }])
+        }
+
+        const reset = () => {
+          setMode('none')
+          setTeams([])
+        }
+
+        return (
+          <div>
+            <div data-testid="current-mode">{mode}</div>
+            <div data-testid="teams-count">{teams.length}</div>
+            
+            {mode === 'none' && (
+              <div>
+                <button onClick={startManualDraft} data-testid="start-manual">
+                  Start Draft
+                </button>
+                <button onClick={startSimulation} data-testid="start-simulation">
+                  Start Simulation
+                </button>
+              </div>
+            )}
+            
+            {mode === 'manual' && (
+              <div>
+                <span data-testid="manual-mode">Manual Draft Mode</span>
+                <button onClick={reset} data-testid="reset">Reset</button>
+                <button onClick={startSimulation} data-testid="switch-simulation">
+                  Start Simulation
+                </button>
+              </div>
+            )}
+            
+            {mode === 'simulation' && (
+              <div>
+                <span data-testid="simulation-mode">Simulation Mode</span>
+                <button onClick={reset} data-testid="reset-sim">Reset</button>
+              </div>
+            )}
+          </div>
+        )
+      }
+
+      render(<TestModeTransitions />)
+
+      // Initially no draft
+      expect(screen.getByTestId('current-mode')).toHaveTextContent('none')
+      expect(screen.getByTestId('teams-count')).toHaveTextContent('0')
+
+      // Start manual draft
+      await user.click(screen.getByTestId('start-manual'))
+      expect(screen.getByTestId('current-mode')).toHaveTextContent('manual')
+      expect(screen.getByTestId('manual-mode')).toBeInTheDocument()
+      expect(screen.getByTestId('teams-count')).toHaveTextContent('1')
+
+      // Switch to simulation from manual
+      await user.click(screen.getByTestId('switch-simulation'))
+      expect(screen.getByTestId('current-mode')).toHaveTextContent('simulation')
+      expect(screen.getByTestId('simulation-mode')).toBeInTheDocument()
+
+      // Reset from simulation
+      await user.click(screen.getByTestId('reset-sim'))
+      expect(screen.getByTestId('current-mode')).toHaveTextContent('none')
+      expect(screen.getByTestId('teams-count')).toHaveTextContent('0')
+    })
+  })
 }) 

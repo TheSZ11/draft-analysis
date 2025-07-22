@@ -29,19 +29,22 @@ export const useDraftState = () => {
   const getCurrentDraftTeam = useCallback((
     isSimulationMode = false, 
     userDraftPos = userDraftPosition, 
-    simulationTeams = []
+    teamsToUse = []
   ) => {
-    if (isSimulationMode && simulationTeams.length > 0) {
+    if (isSimulationMode && teamsToUse.length > 0) {
       // In simulation mode, always return the first team (user's team)
-      return simulationTeams[0];
+      return teamsToUse[0];
     }
+    
+    // In manual mode, use the teams from draft state
+    const teamsArray = teamsToUse.length > 0 ? teamsToUse : teams;
     
     return getCurrentTeam(
       currentPick, 
-      teams, 
+      teamsArray, 
       isSimulationMode, 
       userDraftPos, 
-      simulationTeams
+      teamsToUse
     );
   }, [currentPick, teams, userDraftPosition]);
 
