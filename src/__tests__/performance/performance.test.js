@@ -3,7 +3,7 @@
  * Tests performance across all key areas of the draft tracker application
  */
 
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { 
   processPlayerData,
   calculateReplacementLevels,
@@ -86,6 +86,7 @@ describe('Performance Test Suite', () => {
       );
       const executionTime = performance.now() - start;
 
+      expect(selection).toBeDefined(); // Should return a valid selection
       // AI should be reasonably fast
       expect(executionTime).toBeLessThan(300);
     });
@@ -295,6 +296,7 @@ describe('Performance Test Suite', () => {
       } catch (error) {
         // If the function fails due to data structure issues, 
         // just verify the time limit for the attempt
+        console.warn('Strategic recommendations failed:', error.message);
         const executionTime = performance.now() - start;
         expect(executionTime).toBeLessThan(500);
       }

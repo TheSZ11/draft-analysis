@@ -296,6 +296,7 @@ export const useSimulation = () => {
 
     setSimulationResults(results);
     setShowResultsModal(true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [simulationTeams, userDraftPosition]);
 
   /**

@@ -3,7 +3,7 @@
  * Tests the performance of data processing, calculations, and algorithms
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { 
   processPlayerData,
   calculateReplacementLevels,
@@ -124,6 +124,7 @@ describe('Data Processing Performance', () => {
       );
       const executionTime = performance.now() - start;
 
+      expect(selection).toBeDefined(); // Should return a valid selection
       expect(executionTime).toBeLessThan(200); // AI should be fast
     });
 

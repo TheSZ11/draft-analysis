@@ -168,5 +168,6 @@ export const useMemoWithPerformance = (calculationFn, dependencies, name) => {
     }
     
     return calculationFn();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies);
 }; 

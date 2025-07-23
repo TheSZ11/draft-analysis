@@ -223,7 +223,7 @@ const DraftTrackerContent = () => {
   //   return avgDifficulty;
   // };
 
-  const getRecommendations = () => {
+  const getRecommendations = useCallback(() => {
     const currentTeam = getCurrentTeam();
     if (!currentTeam || !currentTeam.positionLimits) return [];
 
@@ -251,7 +251,7 @@ const DraftTrackerContent = () => {
     );
 
     return strategicRecs?.recommendations || [];
-  };
+  }, [getCurrentTeam, getAvailablePlayers, currentPick, isSimulationMode, teams.length, userDraftPosition, replacementLevels, fixtures, getHookRecommendations]);
 
   // Helper function to get upcoming fixtures text (legacy function)
   // const getUpcomingFixturesText = (playerTeam) => {
@@ -367,6 +367,7 @@ const DraftTrackerContent = () => {
     initializeTeams();
     fetchPlayerData();
     fixtureState.initializeFixtures();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Recalculate replacement levels when players are drafted
@@ -380,7 +381,7 @@ const DraftTrackerContent = () => {
       const newTiers = createPlayerTiers(available, newLevels);
       playerData.setPlayerTiers(newTiers);
     }
-  }, [availablePlayers, draftedPlayers]);
+  }, [availablePlayers, draftedPlayers, playerData]);
 
   const getCurrentTeam = useCallback(() => {
     if (isSimulationMode) {
@@ -389,7 +390,7 @@ const DraftTrackerContent = () => {
       // Manual mode: use the teams from draft state
       return getCurrentDraftTeam(false, 1, teams);
     }
-  }, [isSimulationMode, userDraftPosition, simulationTeams, teams]);
+  }, [isSimulationMode, userDraftPosition, simulationTeams, teams, getCurrentDraftTeam]);
 
   const showTeamComplianceReport = useCallback((team) => {
     const report = generateComplianceReport(team);
@@ -488,10 +489,10 @@ const DraftTrackerContent = () => {
     }
   };
 
-  const getAvailablePlayers = () => {
+  const getAvailablePlayers = useCallback(() => {
     const currentTeam = getCurrentTeam();
     return getFilteredPlayers(draftedPlayers, currentTeam, selectedPosition, searchTerm);
-  };
+  }, [getCurrentTeam, draftedPlayers, selectedPosition, searchTerm, getFilteredPlayers]);
 
   const _handlePlayerHover = (player, event) => {
     handlePlayerHoverHook(player, event);
@@ -733,7 +734,7 @@ const DraftTrackerContent = () => {
   // Pure calculation for recommendations without side effects
   const _recommendations = React.useMemo(() => {
     return getRecommendations();
-  }, [availablePlayers, draftedPlayers, replacementLevels]);
+  }, [getRecommendations]);
 
   // Handle strategic data updates in useEffect to avoid setState during render
   React.useEffect(() => {
@@ -754,7 +755,7 @@ const DraftTrackerContent = () => {
       
       playerData.setStrategicData(strategicInfo);
     }
-  }, [currentTeam, currentPick, teams.length, isSimulationMode, userDraftPosition, availablePlayers, replacementLevels]);
+  }, [currentTeam, currentPick, teams.length, isSimulationMode, userDraftPosition, availablePlayers, replacementLevels, fixtures, getAvailablePlayers, getHookRecommendations, playerData]);
 
   // Debug effect to monitor simulation teams
   useEffect(() => {

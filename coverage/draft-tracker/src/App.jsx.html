@@ -1119,7 +1119,8 @@
 <a name='L1054'></a><a href='#L1054'>1054</a>
 <a name='L1055'></a><a href='#L1055'>1055</a>
 <a name='L1056'></a><a href='#L1056'>1056</a>
-<a name='L1057'></a><a href='#L1057'>1057</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L1057'></a><a href='#L1057'>1057</a>
+<a name='L1058'></a><a href='#L1058'>1058</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1488,6 +1489,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2400,7 +2402,7 @@
   //   return avgDifficulty;
   // };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  const getRecommendations = () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  const getRecommendations = useCallback(() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    const currentTeam = getCurrentTeam();</span>
 <span class="cstat-no" title="statement not covered" >    if (!currentTeam || !currentTeam.positionLimits) return [];</span>
 &nbsp;
@@ -2428,7 +2430,7 @@
 <span class="cstat-no" title="statement not covered" >    );</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return strategicRecs?.recommendations || [];</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >  }, [getCurrentTeam, getAvailablePlayers, currentPick, isSimulationMode, teams.length, userDraftPosition, replacementLevels, fixtures, getHookRecommendations]);</span>
 &nbsp;
   // Helper function to get upcoming fixtures text (legacy function)
   // const getUpcomingFixturesText = (playerTeam) =&gt; {
@@ -2544,6 +2546,7 @@
 <span class="cstat-no" title="statement not covered" >    initializeTeams();</span>
 <span class="cstat-no" title="statement not covered" >    fetchPlayerData();</span>
 <span class="cstat-no" title="statement not covered" >    fixtureState.initializeFixtures();</span>
+  // eslint-disable-next-line react-hooks/exhaustive-deps
 <span class="cstat-no" title="statement not covered" >  }, []);</span>
 &nbsp;
   // Recalculate replacement levels when players are drafted
@@ -2557,7 +2560,7 @@
 <span class="cstat-no" title="statement not covered" >      const newTiers = createPlayerTiers(available, newLevels);</span>
 <span class="cstat-no" title="statement not covered" >      playerData.setPlayerTiers(newTiers);</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" >  }, [availablePlayers, draftedPlayers]);</span>
+<span class="cstat-no" title="statement not covered" >  }, [availablePlayers, draftedPlayers, playerData]);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const getCurrentTeam = useCallback(() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (isSimulationMode) {</span>
@@ -2566,7 +2569,7 @@
       // Manual mode: use the teams from draft state
 <span class="cstat-no" title="statement not covered" >      return getCurrentDraftTeam(false, 1, teams);</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" >  }, [isSimulationMode, userDraftPosition, simulationTeams, teams]);</span>
+<span class="cstat-no" title="statement not covered" >  }, [isSimulationMode, userDraftPosition, simulationTeams, teams, getCurrentDraftTeam]);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const showTeamComplianceReport = useCallback((team) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    const report = generateComplianceReport(team);</span>
@@ -2665,10 +2668,10 @@
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" >  };</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  const getAvailablePlayers = () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  const getAvailablePlayers = useCallback(() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    const currentTeam = getCurrentTeam();</span>
 <span class="cstat-no" title="statement not covered" >    return getFilteredPlayers(draftedPlayers, currentTeam, selectedPosition, searchTerm);</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" >  }, [getCurrentTeam, draftedPlayers, selectedPosition, searchTerm, getFilteredPlayers]);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const _handlePlayerHover = (player, event) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    handlePlayerHoverHook(player, event);</span>
@@ -2910,7 +2913,7 @@
   // Pure calculation for recommendations without side effects
 <span class="cstat-no" title="statement not covered" >  const _recommendations = React.useMemo(() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    return getRecommendations();</span>
-<span class="cstat-no" title="statement not covered" >  }, [availablePlayers, draftedPlayers, replacementLevels]);</span>
+<span class="cstat-no" title="statement not covered" >  }, [getRecommendations]);</span>
 &nbsp;
   // Handle strategic data updates in useEffect to avoid setState during render
 <span class="cstat-no" title="statement not covered" >  React.useEffect(() =&gt; {</span>
@@ -2931,7 +2934,7 @@
       
 <span class="cstat-no" title="statement not covered" >      playerData.setStrategicData(strategicInfo);</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" >  }, [currentTeam, currentPick, teams.length, isSimulationMode, userDraftPosition, availablePlayers, replacementLevels]);</span>
+<span class="cstat-no" title="statement not covered" >  }, [currentTeam, currentPick, teams.length, isSimulationMode, userDraftPosition, availablePlayers, replacementLevels, fixtures, getAvailablePlayers, getHookRecommendations, playerData]);</span>
 &nbsp;
   // Debug effect to monitor simulation teams
 <span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; {</span>
@@ -3238,7 +3241,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-23T20:25:54.369Z
+                at 2025-07-23T21:19:47.518Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
