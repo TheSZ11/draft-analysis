@@ -47,6 +47,7 @@ export const FixtureProvider = ({ children }) => {
  * useFixtureContext - Hook to access fixture context
  * @returns {Object} Fixture context value
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export const useFixtureContext = () => {
   const context = useContext(FixtureContext);
   if (!context) {

@@ -4,7 +4,6 @@ import {
   updatePlayerCalculations 
 } from '../utils/dataProcessing.js';
 import { 
-  getRecommendations,
   getAvailablePlayers as getFilteredPlayers
 } from '../utils/draftLogic.js';
 import { getStrategicRecommendations as getStratRecs } from '../draftStrategy.js';

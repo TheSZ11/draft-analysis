@@ -3,6 +3,7 @@
  * Provides consistent, realistic test data across all test suites
  */
 
+import { vi } from 'vitest'
 import { ROSTER_CATEGORIES } from '../../utils/constants.js'
 
 // Mock players with comprehensive stats

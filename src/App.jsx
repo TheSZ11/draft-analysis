@@ -1,42 +1,26 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { Search, TrendingUp, Users, Clock, Calendar, MapPin, Thermometer, Sun, Cloud, CloudRain, Target, Lightbulb, AlertTriangle, Info } from 'lucide-react';
-import fixtureData from './fixtureData.json';
 import { LEAGUE_CONFIG, createTeamTemplate } from './leagueConfig.js';
 // getStrategicRecommendations is now provided by the playerData hook
 
 // Import utility functions
-import { ROSTER_CATEGORIES, scoringRules, fplDataTeamMapping, difficultyColors } from './utils/constants.js';
+import { ROSTER_CATEGORIES, fplDataTeamMapping } from './utils/constants.js';
 import { 
-  getRosterCounts, 
-  validateRoster,
   validateRosterMove, 
   generateComplianceReport, 
   validateLeagueCompliance,
   validateDraftMove,
-  validateLineupLegality,
   determineRosterCategory
 } from './utils/rosterValidation.js';
 import { 
-  getPlayerTierByName, 
-  getTierColor,
   calculateHistoricalPoints,
   calculateReplacementLevels,
   createPlayerTiers,
   calculateVORP
 } from './utils/playerCalculations.js';
 import { 
-  aiDraftPlayer, 
-  calculateDraftPosition 
+  aiDraftPlayer
 } from './utils/draftLogic.js';
-
-// Import custom hooks
-import { 
-  useDraftState, 
-  usePlayerData, 
-  useSimulation, 
-  useUI, 
-  useFixtures 
-} from './hooks/index.js';
 
 // Import context providers and hooks
 import { 
@@ -68,55 +52,55 @@ const DraftTrackerContent = () => {
     currentPick, 
     draftedPlayers, 
     getCurrentDraftTeam, 
-    draftPlayerToTeam, 
-    getDraftProgress,
+    _draftPlayerToTeam, 
+    _getDraftProgress,
     isSimulationMode,
     simulationTeams,
     userDraftPosition,
-    simulationResults,
-    showResultsModal,
-    startSimulation: startSimulationFromContext,
+    _simulationResults,
+    _showResultsModal,
+    startSimulation: _startSimulationFromContext,
     resetSimulation: resetSimulationFromContext,
-    processAIPicks,
-    draftPlayerInSimulation,
+    _processAIPicks,
+    _draftPlayerInSimulation,
     draftState,
     simulation
   } = useDraftContext();
 
   const { 
-    loading, 
+    _loading, 
     availablePlayers, 
     replacementLevels, 
-    playerTiers, 
-    strategicData,
+    _playerTiers, 
+    _strategicData,
     getAvailablePlayers: getFilteredPlayers, 
     getStrategicRecommendations: getHookRecommendations,
-    updateCalculations,
+    _updateCalculations,
     playerData
   } = usePlayerContext();
 
   const { 
     searchTerm, 
     selectedPosition, 
-    hoveredPlayer, 
-    tooltipPosition, 
-    showComplianceReport, 
-    complianceReportData,
-    forceUpdate,
+    _hoveredPlayer, 
+    _tooltipPosition, 
+    _showComplianceReport, 
+    _complianceReportData,
+    _forceUpdate,
     handlePlayerHover: handlePlayerHoverHook,
-    clearPlayerHover,
+    _clearPlayerHover,
     showComplianceReportModal,
-    hideComplianceReportModal,
-    triggerForceUpdate,
-    updateSearchTerm,
-    updateSelectedPosition,
+    _hideComplianceReportModal,
+    _triggerForceUpdate,
+    _updateSearchTerm,
+    _updateSelectedPosition,
     ui
   } = useUIContext();
 
   const { 
     fixtures, 
-    getUpcomingIndicators, 
-    getDifficultyScore,
+    _getUpcomingIndicators, 
+    _getDifficultyScore,
     fixtureState
   } = useFixtureContext();
   
@@ -159,7 +143,7 @@ const DraftTrackerContent = () => {
   const scoringRules = LEAGUE_CONFIG.scoringRules;
 
   // Team mapping from fixture full names to FPL codes
-  const teamMapping = {
+  const _teamMapping = {
     "Liverpool": "LIV", "Manchester City": "MCI", "Arsenal": "ARS", 
     "Chelsea": "CHE", "Tottenham Hotspur": "TOT", "Manchester United": "MUN", 
     "Newcastle United": "NEW", "Brighton & Hove Albion": "BHA", "Aston Villa": "AVL", 
@@ -420,11 +404,11 @@ const DraftTrackerContent = () => {
       const pickInRound = ((currentPick - 1) % 10) + 1;
       
       // Determine which team should pick in snake draft
-      let teamIndex;
+      let _teamIndex;
       if (currentRound % 2 === 1) {
-        teamIndex = pickInRound - 1; // 1-10
+        _teamIndex = pickInRound - 1; // 1-10
       } else {
-        teamIndex = 10 - pickInRound; // 10-1
+        _teamIndex = 10 - pickInRound; // 10-1
       }
       
       // Only allow user to draft when it's their turn (user is at userDraftPosition)
@@ -509,13 +493,13 @@ const DraftTrackerContent = () => {
     return getFilteredPlayers(draftedPlayers, currentTeam, selectedPosition, searchTerm);
   };
 
-  const handlePlayerHover = (player, event) => {
+  const _handlePlayerHover = (player, event) => {
     handlePlayerHoverHook(player, event);
   };
 
   // PlayerTooltip component is now imported from components/
 
-  const getTeamFixtureIndicators = (playerTeam) => {
+  const _getTeamFixtureIndicators = (playerTeam) => {
     // Player team is already in FPL code format
     const teamFixtures = fixtures[playerTeam] || [];
     return teamFixtures.slice(0, 3);
@@ -526,7 +510,7 @@ const DraftTrackerContent = () => {
   // aiDraftPlayer is now imported from utils/draftLogic.js
 
   // Initialize simulation
-  const startSimulation = async () => {
+  const _startSimulation = async () => {
     // Randomize user draft position (1-10)
     const randomPosition = Math.floor(Math.random() * 10) + 1;
     simulation.setUserDraftPosition(randomPosition);
@@ -566,7 +550,7 @@ const DraftTrackerContent = () => {
   };
 
   // Run AI picks for a round
-  const runAIRound = (currentPickNumber, userPosition, teams, availablePlayersList) => {
+  const _runAIRound = (currentPickNumber, userPosition, teams, availablePlayersList) => {
     const currentRound = Math.floor((currentPickNumber - 1) / 10) + 1;
     const pickInRound = ((currentPickNumber - 1) % 10) + 1;
     
@@ -688,7 +672,7 @@ const DraftTrackerContent = () => {
   };
 
   // Reset simulation and all draft state
-  const resetSimulation = () => {
+  const _resetSimulation = () => {
     // Reset simulation state
     resetSimulationFromContext();
     
@@ -747,7 +731,7 @@ const DraftTrackerContent = () => {
   const currentTeam = getCurrentTeam();
   
   // Pure calculation for recommendations without side effects
-  const recommendations = React.useMemo(() => {
+  const _recommendations = React.useMemo(() => {
     return getRecommendations();
   }, [availablePlayers, draftedPlayers, replacementLevels]);
 
@@ -884,13 +868,6 @@ const DraftTrackerContent = () => {
         pick++;
       }
       continue;
-      
-      // If it's the user's turn and this was triggered by user action, allow the pick
-      if (isUserTurn && isUserAction) {
-        break;
-      }
-      
-      pick++;
     }
     
     // Check if simulation is complete

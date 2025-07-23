@@ -57,6 +57,7 @@ export const PlayerProvider = ({ children }) => {
  * usePlayerContext - Hook to access player context
  * @returns {Object} Player context value
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export const usePlayerContext = () => {
   const context = useContext(PlayerContext);
   if (!context) {

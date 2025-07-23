@@ -92,6 +92,7 @@ export const DraftProvider = ({ children }) => {
  * useDraftContext - Hook to access draft context
  * @returns {Object} Draft context value
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export const useDraftContext = () => {
   const context = useContext(DraftContext);
   if (!context) {

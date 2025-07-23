@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { aiDraftPlayer } from '../../utils/draftLogic.js';
 import { validateRoster, getRosterCounts, determineRosterCategory } from '../../utils/rosterValidation.js';
 import { LEAGUE_CONFIG } from '../../leagueConfig.js';
-import { mockPlayers } from '../fixtures/mockData.js';
+import { mockPlayers as _mockPlayers } from '../fixtures/mockData.js';
 
 // Use the real strategic recommendation system to test actual AI behavior
 

@@ -3,11 +3,18 @@
  * Helps identify re-renders and measure performance improvements
  */
 
+import React from 'react';
+
+// Safe access to environment variables
+const isDevelopment = typeof process !== 'undefined' 
+  ? process.env?.NODE_ENV === 'development' 
+  : import.meta.env?.DEV || false;
+
 class PerformanceMonitor {
   constructor() {
     this.renderCounts = new Map();
     this.renderTimes = new Map();
-    this.isEnabled = process.env.NODE_ENV === 'development';
+    this.isEnabled = isDevelopment;
   }
 
   /**
@@ -115,7 +122,7 @@ class PerformanceMonitor {
 export const performanceMonitor = new PerformanceMonitor();
 
 // Expose to window for debugging in development
-if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+  if (typeof window !== 'undefined' && isDevelopment) {
   window.performanceMonitor = performanceMonitor;
 }
 
@@ -126,7 +133,7 @@ if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
  * @returns {React.Component} Wrapped component
  */
 export const withPerformanceMonitoring = (Component, componentName) => {
-  if (process.env.NODE_ENV !== 'development') {
+  if (!isDevelopment) {
     return Component;
   }
 
@@ -147,7 +154,7 @@ export const withPerformanceMonitoring = (Component, componentName) => {
  */
 export const useMemoWithPerformance = (calculationFn, dependencies, name) => {
   return React.useMemo(() => {
-    if (process.env.NODE_ENV === 'development') {
+    if (isDevelopment) {
       const startTime = performance.now();
       const result = calculationFn();
       const endTime = performance.now();

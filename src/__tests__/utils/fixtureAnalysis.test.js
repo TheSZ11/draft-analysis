@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
   TEAM_STRENGTH_RATINGS,
   POSITION_FIXTURE_WEIGHTS,

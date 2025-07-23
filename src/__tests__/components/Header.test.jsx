@@ -222,7 +222,7 @@ describe('Header Component', () => {
     it('should memoize expensive calculations', () => {
       const { rerender } = render(<Header currentTeam={mockCurrentTeam} />)
       
-      const progressText = screen.getAllByText(/Pick 15 of 60/)[0]
+      const _progressText = screen.getAllByText(/Pick 15 of 60/)[0]
       
       // Re-render with same context values
       rerender(<Header currentTeam={mockCurrentTeam} />)

@@ -40,7 +40,7 @@ const HeaderComponent = ({ currentTeam, startDraft, resetDraft }) => {
 
   // Determine if draft is active
   const isDraftActive = teams.length > 0;
-  const hasNoTeams = teams.length === 0;
+  const _hasNoTeams = teams.length === 0;
   return (
     <header className="bg-slate-800 shadow-sm border-b border-slate-700 sticky top-0 z-10">
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8">

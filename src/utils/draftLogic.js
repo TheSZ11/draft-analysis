@@ -1,5 +1,5 @@
 import { getStrategicRecommendations } from '../draftStrategy.js';
-import { getRosterCounts, validateDraftMove } from './rosterValidation.js';
+import { validateDraftMove } from './rosterValidation.js';
 import { calculateVORP } from './playerCalculations.js';
 
 /**

@@ -1,7 +1,5 @@
 import React, { useMemo, useCallback } from 'react';
 import { TrendingUp, Lightbulb, AlertTriangle, Target, Clock, Info, Search } from 'lucide-react';
-import { getPlayerTierByName, getTierColor } from '../utils/playerCalculations.js';
-import { difficultyColors } from '../utils/constants.js';
 import { usePlayerContext, useDraftContext, useUIContext, useFixtureContext } from '../contexts/index.js';
 import { PlayerCard } from './PlayerCard.jsx';
 

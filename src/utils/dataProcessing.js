@@ -1,4 +1,4 @@
-import { teamMapping, fplDataTeamMapping, difficultyColors } from './constants.js';
+import { teamMapping, fplDataTeamMapping } from './constants.js';
 import { processPlayerData, calculateReplacementLevels, createPlayerTiers } from './playerCalculations.js';
 
 /**

@@ -73,6 +73,7 @@ export const UIProvider = ({ children }) => {
  * useUIContext - Hook to access UI context
  * @returns {Object} UI context value
  */
+// eslint-disable-next-line react-refresh/only-export-components
 export const useUIContext = () => {
   const context = useContext(UIContext);
   if (!context) {
