@@ -246,9 +246,9 @@ export const calculatePositionNeedScore = (position, rosterAnalysis, round, draf
   
   // CRITICAL: Missing minimum requirements get reasonable bonus (not massive for goalkeepers)
   if (positionNeed.stillNeed > 0 && positionNeed.current === 0) {
-    // Different bonuses by position - goalkeepers get much less since they should be drafted late
+    // Different bonuses by position - goalkeepers get significant bonus since they're required
     if (position === 'G') {
-      needScore += 30; // Small bonus for missing goalkeeper
+      needScore += 80; // Significant bonus for missing goalkeeper (increased from 30)
     } else {
       needScore += 100; // Larger bonus for missing outfield players
     }
@@ -260,6 +260,17 @@ export const calculatePositionNeedScore = (position, rosterAnalysis, round, draf
     needScore += 20 * urgencyMultiplier;
   }
   
+  // CRITICAL: Add escalating late-round urgency for missing goalkeepers
+  if (position === 'G' && positionNeed.stillNeed > 0 && positionNeed.current === 0) {
+    if (round >= 12) {
+      needScore += 150; // Emergency: must draft GK immediately
+    } else if (round >= 10) {
+      needScore += 80; // Very urgent: GK needed soon
+    } else if (round >= 8) {
+      needScore += 40; // Urgent: entering GK sweet spot
+    }
+  }
+  
   // Reduce score if position is full or luxury
   if (positionNeed.isFull) {
     needScore = -30; // Penalty for drafting to full position
@@ -268,7 +279,13 @@ export const calculatePositionNeedScore = (position, rosterAnalysis, round, draf
   }
   
   // Progressive weighting: very low early, higher later
-  const needWeight = round <= 3 ? 0.1 : round <= 6 ? 0.4 : round <= 10 ? 0.7 : 1.0;
+  let needWeight = round <= 3 ? 0.1 : round <= 6 ? 0.4 : round <= 10 ? 0.7 : 1.0;
+  
+  // CRITICAL: Special weighting for missing goalkeepers - they need higher weight even in early rounds
+  if (position === 'G' && positionNeed.stillNeed > 0 && positionNeed.current === 0) {
+    // Goalkeeper missing entirely gets much higher weight to ensure drafting
+    needWeight = Math.max(needWeight, round >= 8 ? 1.0 : round >= 6 ? 0.8 : 0.6);
+  }
   
   return needScore * needWeight;
 };
@@ -545,28 +562,40 @@ export const getStrategicRecommendations = (
   const scoredPlayers = availablePlayers.map(player => {
     let scoring;
     
-    // PROPER GOALKEEPER TIMING: No goalkeepers before round 10, optimal timing rounds 10-13
+    // IMPROVED GOALKEEPER TIMING: Account for roster urgency and draft length
     if (player.position === 'G') {
       const vorp = calculateVORP(player, activeReplacementLevels);
       const positionNeed = rosterAnalysis.positionNeeds.G;
       const hasNoGK = positionNeed && positionNeed.current === 0;
       const hasMultipleGK = positionNeed && positionNeed.current >= 1;
       
+      // Calculate how close we are to roster completion
+      const totalDrafted = currentRoster.length;
+      const maxRosterSize = 14; // From league config
+      const roundsRemaining = maxRosterSize - totalDrafted;
+      const isRosterAlmostFull = roundsRemaining <= 4; // Last 4 picks
+      
       let penaltyScore = 0;
       let positionBonusScore = 0;
       
-      if (round < 10) {
-        // Never draft goalkeepers before round 10
-        penaltyScore = -500; // Massive penalty
+      if (round < 8) {
+        // Early rounds: moderate penalty unless roster urgency
+        penaltyScore = hasNoGK && isRosterAlmostFull ? -50 : -200;
+      } else if (round >= 8 && round < 10) {
+        // Late-early rounds: small penalty unless no GK and roster getting full
+        penaltyScore = hasNoGK && isRosterAlmostFull ? 0 : -100;
       } else if (round >= 10 && round <= 13 && hasNoGK) {
         // Optimal goalkeeper rounds when we need one
-        positionBonusScore = 30; // Small bonus for good timing
+        positionBonusScore = 50; // Increased bonus for good timing
       } else if (hasMultipleGK) {
         // Already have a goalkeeper, don't need another
         penaltyScore = -300; // Heavy penalty for multiple goalkeepers
       } else if (round > 13 && hasNoGK) {
-        // Getting late, need to draft one soon
-        positionBonusScore = 50; // Stronger bonus for urgency
+        // Very late, emergency pick needed
+        positionBonusScore = 100; // Strong bonus for urgency
+      } else if (hasNoGK && isRosterAlmostFull) {
+        // Emergency: running out of picks and no GK
+        positionBonusScore = 150; // Emergency bonus to ensure GK gets drafted
       }
       
       // Add fixture and minutes bonus for goalkeepers in later rounds

@@ -236,7 +236,7 @@ describe('usePlayerData Hook', () => {
       )
 
       expect(getStrategicRecommendations).toHaveBeenCalledWith(
-        mockRoster, mockRound, mockPosition, mockAvailable, mockLevels, 10
+        mockRoster, mockRound, mockPosition, mockAvailable, mockLevels, 10, null
       )
       expect(recommendations).toEqual({
         recommendations: [],
