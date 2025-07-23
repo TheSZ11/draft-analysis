@@ -21,7 +21,7 @@
     "test:e2e:debug": "playwright test --debug",
     "test:all": "npm run test:unit && npm run test:component && npm run test:integration",
     "test:ci": "vitest run --coverage --reporter=basic --reporter=junit",
-    "test:performance": "vitest run --coverage src/**/__tests__/performance",
+    "test:performance": "vitest run --coverage src/__tests__/performance/**",
     "coverage:open": "open coverage/index.html",
     "coverage:serve": "python -m http.server 8080 -d coverage"
   },
