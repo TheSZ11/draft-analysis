@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/165</span>
+                <span class='fraction'>0/172</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/165</span>
+                <span class='fraction'>0/172</span>
             </div>
         
             
@@ -227,7 +227,21 @@
 <a name='L162'></a><a href='#L162'>162</a>
 <a name='L163'></a><a href='#L163'>163</a>
 <a name='L164'></a><a href='#L164'>164</a>
-<a name='L165'></a><a href='#L165'>165</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -396,11 +410,18 @@
 <span class="cstat-no" title="statement not covered" > * Helps identify re-renders and measure performance improvements</span>
 <span class="cstat-no" title="statement not covered" > */</span>
 <span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >import React from 'react';</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >// Safe access to environment variables</span>
+<span class="cstat-no" title="statement not covered" >const isDevelopment = typeof window !== 'undefined' &amp;&amp; typeof window.process !== 'undefined'</span>
+<span class="cstat-no" title="statement not covered" >  ? window.process.env?.NODE_ENV === 'development' </span>
+<span class="cstat-no" title="statement not covered" >  : import.meta.env?.DEV || false;</span>
+<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >class PerformanceMonitor {</span>
 <span class="cstat-no" title="statement not covered" >  constructor() {</span>
 <span class="cstat-no" title="statement not covered" >    this.renderCounts = new Map();</span>
 <span class="cstat-no" title="statement not covered" >    this.renderTimes = new Map();</span>
-<span class="cstat-no" title="statement not covered" >    this.isEnabled = process.env.NODE_ENV === 'development';</span>
+<span class="cstat-no" title="statement not covered" >    this.isEnabled = isDevelopment;</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  /**</span>
@@ -508,7 +529,7 @@
 <span class="cstat-no" title="statement not covered" >export const performanceMonitor = new PerformanceMonitor();</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >// Expose to window for debugging in development</span>
-<span class="cstat-no" title="statement not covered" >if (typeof window !== 'undefined' &amp;&amp; process.env.NODE_ENV === 'development') {</span>
+<span class="cstat-no" title="statement not covered" >  if (typeof window !== 'undefined' &amp;&amp; isDevelopment) {</span>
 <span class="cstat-no" title="statement not covered" >  window.performanceMonitor = performanceMonitor;</span>
 <span class="cstat-no" title="statement not covered" >}</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -519,7 +540,7 @@
 <span class="cstat-no" title="statement not covered" > * @returns {React.Component} Wrapped component</span>
 <span class="cstat-no" title="statement not covered" > */</span>
 <span class="cstat-no" title="statement not covered" >export const withPerformanceMonitoring = (Component, componentName) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  if (process.env.NODE_ENV !== 'development') {</span>
+<span class="cstat-no" title="statement not covered" >  if (!isDevelopment) {</span>
 <span class="cstat-no" title="statement not covered" >    return Component;</span>
 <span class="cstat-no" title="statement not covered" >  }</span>
 <span class="cstat-no" title="statement not covered" ></span>
@@ -540,7 +561,7 @@
 <span class="cstat-no" title="statement not covered" > */</span>
 <span class="cstat-no" title="statement not covered" >export const useMemoWithPerformance = (calculationFn, dependencies, name) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  return React.useMemo(() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (process.env.NODE_ENV === 'development') {</span>
+<span class="cstat-no" title="statement not covered" >    if (isDevelopment) {</span>
 <span class="cstat-no" title="statement not covered" >      const startTime = performance.now();</span>
 <span class="cstat-no" title="statement not covered" >      const result = calculationFn();</span>
 <span class="cstat-no" title="statement not covered" >      const endTime = performance.now();</span>
@@ -562,7 +583,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-22T04:22:20.816Z
+                at 2025-07-23T20:25:54.369Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
