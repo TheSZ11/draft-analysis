@@ -412,7 +412,7 @@ describe('Draft Logic Utils', () => {
         ]
       }
 
-      const selected = aiDraftPlayer(
+      const _selected = aiDraftPlayer(
         experiencedTeam,
         mockAvailablePlayers,
         mockReplacementLevels,
@@ -449,7 +449,7 @@ describe('Draft Logic Utils', () => {
     })
 
     it('should handle null replacement levels', () => {
-      const selected = aiDraftPlayer(
+      const _selected = aiDraftPlayer(
         mockTeam,
         mockAvailablePlayers,
         null,
@@ -531,7 +531,7 @@ describe('Draft Logic Utils', () => {
           // Missing required properties
         }
 
-        const selected = aiDraftPlayer(
+        const _selected = aiDraftPlayer(
           badTeam,
           mockAvailablePlayers,
           mockReplacementLevels,
@@ -544,7 +544,7 @@ describe('Draft Logic Utils', () => {
       })
 
       it('should handle negative draft positions and rounds', () => {
-        const selected = aiDraftPlayer(
+        const _selected = aiDraftPlayer(
           mockTeam,
           mockAvailablePlayers,
           mockReplacementLevels,

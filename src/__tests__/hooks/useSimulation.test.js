@@ -78,7 +78,7 @@ vi.mock('../../utils/rosterValidation.js', () => ({
 }))
 
 import { aiDraftPlayer, calculateDraftPosition } from '../../utils/draftLogic.js'
-import { determineRosterCategory, validateDraftMove } from '../../utils/rosterValidation.js'
+import { determineRosterCategory, validateDraftMove as _validateDraftMove } from '../../utils/rosterValidation.js'
 
 describe('useSimulation Hook', () => {
   beforeEach(() => {

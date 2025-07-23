@@ -296,7 +296,7 @@ export const validateLeagueCompliance = (team) => {
   const counts = getRosterCounts(team);
   
   // Check for completely empty positions
-  Object.entries(team.positionLimits).forEach(([position, limits]) => {
+  Object.entries(team.positionLimits).forEach(([position, _limits]) => {
     const totalCount = counts.active.byPosition[position] + 
                       counts.reserve.byPosition[position] + 
                       counts.injured_reserve.byPosition[position];

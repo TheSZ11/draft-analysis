@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react'
+import { render, cleanup, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { DraftProvider } from '../../contexts/DraftContext.jsx'
 import { PlayerProvider } from '../../contexts/PlayerContext.jsx'
@@ -19,7 +19,7 @@ vi.mock('../../utils/dataProcessing.js', () => ({
     playerTiers: {}
   })),
   updatePlayerCalculations: vi.fn(),
-  getTeamFixtureIndicators: vi.fn((teamCode, fixtures, count = 3) => [
+  getTeamFixtureIndicators: vi.fn((teamCode, fixtures, _count = 3) => [
     { difficulty: 2, isHome: true, opponent: 'LIV', gameweek: 1 },
     { difficulty: 4, isHome: false, opponent: 'MCI', gameweek: 2 },
     { difficulty: 1, isHome: true, opponent: 'NEW', gameweek: 3 }

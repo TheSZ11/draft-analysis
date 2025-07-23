@@ -167,7 +167,7 @@ export const usePlayerData = () => {
     if (!playerTiers || typeof playerTiers !== 'object' || !playerName) return null;
     
     // playerTiers is an object with position keys containing arrays of players
-    for (const [position, players] of Object.entries(playerTiers)) {
+    for (const [_position, players] of Object.entries(playerTiers)) {
       if (Array.isArray(players)) {
         const foundPlayer = players.find(p => p && p.name === playerName);
         if (foundPlayer && foundPlayer.tier) {

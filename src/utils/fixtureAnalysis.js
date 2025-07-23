@@ -265,7 +265,7 @@ export const POSITION_FIXTURE_WEIGHTS = {
  * @param {Object} options - Additional options
  * @returns {Object} Enhanced difficulty analysis
  */
-export const calculateEnhancedFixtureDifficulty = (teamCode, opponentCode, isHome = true, playerPosition = 'M', options = {}) => {
+export const calculateEnhancedFixtureDifficulty = (teamCode, opponentCode, isHome = true, playerPosition = 'M', _options = {}) => {
   const teamStrength = TEAM_STRENGTH_RATINGS[teamCode];
   const opponentStrength = TEAM_STRENGTH_RATINGS[opponentCode];
   const positionWeights = POSITION_FIXTURE_WEIGHTS[playerPosition];

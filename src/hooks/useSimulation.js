@@ -25,7 +25,7 @@ export const useSimulation = () => {
    * @param {number} position - User's draft position (1-10). If not provided, will be randomized.
    * @param {Array} teams - Regular teams to use as template
    */
-  const startSimulation = useCallback((position = null, teams = []) => {
+  const startSimulation = useCallback((position = null, _teams = []) => {
     // Generate random draft position if none provided
     const finalPosition = position ?? Math.floor(Math.random() * 10) + 1;
     

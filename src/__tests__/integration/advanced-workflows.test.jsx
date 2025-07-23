@@ -40,7 +40,7 @@ vi.mock('../../utils/dataProcessing.js', () => ({
     }
   })),
   updatePlayerCalculations: vi.fn(),
-  getTeamFixtureIndicators: vi.fn((teamCode, fixtures, count = 3) => [
+  getTeamFixtureIndicators: vi.fn((teamCode, fixtures, _count = 3) => [
     { difficulty: 2, isHome: true, opponent: 'LIV', gameweek: 1 },
     { difficulty: 4, isHome: false, opponent: 'MCI', gameweek: 2 },
     { difficulty: 1, isHome: true, opponent: 'NEW', gameweek: 3 }
@@ -50,7 +50,7 @@ vi.mock('../../utils/dataProcessing.js', () => ({
 }))
 
 vi.mock('../../utils/draftLogic.js', () => ({
-  getRecommendations: vi.fn((availablePlayers, currentTeam) => {
+  getRecommendations: vi.fn((availablePlayers, _currentTeam) => {
     // Return position-based recommendations
     const positions = ['F', 'M', 'D', 'G']
     return availablePlayers
@@ -59,7 +59,7 @@ vi.mock('../../utils/draftLogic.js', () => ({
       .map(p => ({ ...p, reason: `Recommended ${p.position}` }))
   }),
   getAvailablePlayers: vi.fn(() => createMockPlayersArray(50)),
-  aiDraftPlayer: vi.fn((availablePlayers, currentTeam, pickNumber) => {
+  aiDraftPlayer: vi.fn((availablePlayers, currentTeam, _pickNumber) => {
     // Smart AI that drafts based on position needs
     const teamPicks = currentTeam?.picks || []
     const positionCounts = teamPicks.reduce((acc, player) => {
@@ -119,7 +119,7 @@ vi.mock('../../utils/rosterValidation.js', () => ({
 }))
 
 vi.mock('../../draftStrategy.js', () => ({
-  getStrategicRecommendations: vi.fn((currentTeam, availablePlayers, draftContext) => ({
+  getStrategicRecommendations: vi.fn((currentTeam, availablePlayers, _draftContext) => ({
     recommendations: [
       { 
         player: availablePlayers[0], 
@@ -358,7 +358,7 @@ describe('Advanced Workflow Integration Tests', () => {
       const MockSimulation = () => {
         const [isSimulating, setIsSimulating] = React.useState(false)
         const [currentPick, setCurrentPick] = React.useState(1)
-        const [teams, setTeams] = React.useState(createMockTeams(4))
+        const [teams, _setTeams] = React.useState(createMockTeams(4))
 
         const runSimulation = async () => {
           setIsSimulating(true)

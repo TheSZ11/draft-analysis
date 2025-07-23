@@ -284,7 +284,7 @@ describe('AI Draft Strategy Analysis', () => {
       }
 
              // Analyze the results across all teams
-       teams.forEach((team, index) => {
+       teams.forEach((team, _index) => {
          const counts = getRosterCounts(team);
         const totalByPosition = {
           D: counts.active.byPosition.D + counts.reserve.byPosition.D + counts.injured_reserve.byPosition.D,

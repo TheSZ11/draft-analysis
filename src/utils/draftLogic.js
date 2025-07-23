@@ -21,7 +21,7 @@ export const aiDraftPlayer = (
   currentRound, 
   draftPosition, 
   draftedPlayers = [],
-  isSimulationMode = false,
+  _isSimulationMode = false,
   totalTeams = 10
 ) => {
   // Basic validations first

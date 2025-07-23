@@ -1,5 +1,5 @@
 import { LEAGUE_CONFIG } from './leagueConfig.js';
-import { analyzeUpcomingFixtures, calculateEnhancedFixtureDifficulty, getTeamStrength } from './utils/fixtureAnalysis.js';
+import { analyzeUpcomingFixtures, calculateEnhancedFixtureDifficulty as _calculateEnhancedFixtureDifficulty, getTeamStrength as _getTeamStrength } from './utils/fixtureAnalysis.js';
 import { predictPlayerMinutes, adjustPlayerForPredictedMinutes } from './utils/minutesPrediction.js';
 import { calculateReplacementLevels } from './utils/playerCalculations.js';
 
@@ -34,7 +34,7 @@ export const POSITION_SCARCITY = {
 };
 
 // Draft position strategies
-export const getDraftPositionStrategy = (draftPosition, teams = 10) => {
+export const getDraftPositionStrategy = (draftPosition, _teams = 10) => {
   const positionType = DRAFT_POSITIONS.EARLY.includes(draftPosition) ? 'EARLY' :
                       DRAFT_POSITIONS.MIDDLE.includes(draftPosition) ? 'MIDDLE' : 'LATE';
   
@@ -87,7 +87,7 @@ export const getRoundStrategy = (round, draftPosition, currentRoster) => {
   const phase = ROUND_PHASES.EARLY.includes(round) ? 'EARLY' :
                ROUND_PHASES.MID.includes(round) ? 'MID' : 'LATE';
   
-  const rosterCounts = getRosterCounts(currentRoster);
+  const _rosterCounts = getRosterCounts(currentRoster);
   const positionStrategy = getDraftPositionStrategy(draftPosition);
   
   const strategies = {
@@ -219,7 +219,7 @@ export const analyzeRosterComposition = (roster, currentRound) => {
 };
 
 // Calculate position need score
-export const calculatePositionNeedScore = (position, rosterAnalysis, round, draftPosition) => {
+export const calculatePositionNeedScore = (position, rosterAnalysis, round, _draftPosition) => {
   const positionNeed = rosterAnalysis.positionNeeds[position];
   if (!positionNeed) return 0;
   
@@ -374,7 +374,7 @@ export const calculateScarcityBonus = (player, availablePlayers, round) => {
 };
 
 // Calculate round-specific bonus
-export const calculateRoundSpecificBonus = (player, round, rosterAnalysis) => {
+export const calculateRoundSpecificBonus = (player, round, _rosterAnalysis) => {
   let bonus = 0;
   const playerPoints = player.historicalPoints || 0;
   
@@ -432,7 +432,7 @@ export const calculateMinutesBonus = (player, minutesPrediction, round) => {
     return 0; // No minutes adjustment for very early picks
   }
   
-  const { predictedMinutes, minutesPerGame, confidence, playingStatus } = minutesPrediction;
+  const { predictedMinutes, minutesPerGame: _minutesPerGame, confidence, playingStatus } = minutesPrediction;
   
   // Base bonus/penalty based on projected playing time
   let minutesScore = 0;

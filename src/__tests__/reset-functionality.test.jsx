@@ -4,12 +4,12 @@ import { act } from '@testing-library/react';
 import React from 'react';
 import { renderHook } from '@testing-library/react';
 import { useSimulation } from '../hooks/useSimulation.js';
-import { useDraftState } from '../hooks/useDraftState.js';
+import { useDraftState as _useDraftState } from '../hooks/useDraftState.js';
 import { DraftProvider, useDraftContext } from '../contexts/DraftContext.jsx';
-import { mockPlayerData } from './fixtures/mockData.js';
+import { mockPlayerData as _mockPlayerData } from './fixtures/mockData.js';
 
 // Test fixture data
-const createMockTeam = (id, name) => ({
+const _createMockTeam = (id, name) => ({
   id,
   name,
   picks: [],

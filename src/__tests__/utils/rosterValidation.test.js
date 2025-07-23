@@ -2,10 +2,10 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { 
   getRosterCounts, 
   canAddToCategory, 
-  validateRoster,
+  validateRoster as _validateRoster,
   validateRosterMove,
   generateComplianceReport,
-  validateLeagueCompliance,
+  validateLeagueCompliance as _validateLeagueCompliance,
   validateDraftMove,
   validateLineupLegality,
   determineRosterCategory

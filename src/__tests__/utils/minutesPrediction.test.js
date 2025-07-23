@@ -34,7 +34,7 @@ describe('Minutes Prediction Model', () => {
     });
 
     it('should have age factors that peak at the specified age', () => {
-      Object.entries(POSITION_AGE_CURVES).forEach(([position, curve]) => {
+      Object.entries(POSITION_AGE_CURVES).forEach(([_position, curve]) => {
         const peakAge = curve.peakAge;
         const peakFactor = curve.ageFactors[peakAge];
         
@@ -47,7 +47,7 @@ describe('Minutes Prediction Model', () => {
     });
 
     it('should show decline with age', () => {
-      Object.entries(POSITION_AGE_CURVES).forEach(([position, curve]) => {
+      Object.entries(POSITION_AGE_CURVES).forEach(([_position, curve]) => {
         const factor25 = curve.ageFactors[25];
         const factor35 = curve.ageFactors[35];
         

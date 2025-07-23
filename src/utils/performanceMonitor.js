@@ -6,8 +6,8 @@
 import React from 'react';
 
 // Safe access to environment variables
-const isDevelopment = typeof process !== 'undefined' 
-  ? process.env?.NODE_ENV === 'development' 
+const isDevelopment = typeof window !== 'undefined' && typeof window.process !== 'undefined'
+  ? window.process.env?.NODE_ENV === 'development' 
   : import.meta.env?.DEV || false;
 
 class PerformanceMonitor {

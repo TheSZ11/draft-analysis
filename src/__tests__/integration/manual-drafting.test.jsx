@@ -216,7 +216,7 @@ describe('Manual Drafting Integration Tests', () => {
     it('should maintain draftedPlayers as array of strings, not objects', async () => {
       const DraftedPlayersTypeChecker = () => {
         const [draftedPlayers, setDraftedPlayers] = React.useState([])
-        const [typeErrors, setTypeErrors] = React.useState([])
+        const [_typeErrors, setTypeErrors] = React.useState([])
         
         const testPlayer = { id: 1, name: 'Mohamed Salah', position: 'F', team: 'Liverpool' }
         

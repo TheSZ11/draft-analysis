@@ -13,9 +13,9 @@ import { Header } from '../../components/Header.jsx'
 import { 
   mockPlayers, 
   mockTeams, 
-  createMockTeams,
+  createMockTeams as _createMockTeams,
   createMockPlayersArray,
-  mockReplacementLevels,
+  mockReplacementLevels as _mockReplacementLevels,
   mockStrategicRecommendations 
 } from '../fixtures/mockData.js'
 
@@ -96,7 +96,7 @@ describe('Draft Flow Integration Tests', () => {
           mockPlayers.poor       // Another player (likely goalkeeper)
         ])
 
-        const draftPlayer = (player) => {
+        const _draftPlayer = (player) => {
           setCurrentTeam(prev => ({
             ...prev,
             picks: [...prev.picks, { ...player, rosterCategory: 'active' }]
@@ -139,7 +139,7 @@ describe('Draft Flow Integration Tests', () => {
             { ...mockPlayers.poor, position: 'F', rosterCategory: 'active' }        // Forward 4
           ]
         })
-        const [canDraft, setCanDraft] = useState(true)
+        const [_canDraft, setCanDraft] = useState(true)
         
         // Check if can draft more forwards (max 4 allowed)
         const forwardCount = currentTeam.picks.filter(p => p.position === 'F').length
@@ -267,7 +267,7 @@ describe('Draft Flow Integration Tests', () => {
           setIsSimulating(true)
         }
 
-        const makeUserPick = (player) => {
+        const makeUserPick = (_player) => {
           if (currentPick === userPosition) {
             setUserPicks(prev => prev + 1)
             setCurrentPick(prev => prev + 1)

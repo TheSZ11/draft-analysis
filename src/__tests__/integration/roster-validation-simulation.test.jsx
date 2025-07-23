@@ -4,7 +4,7 @@ import { useSimulation } from '../../hooks/useSimulation.js';
 import { aiDraftPlayer } from '../../utils/draftLogic.js';
 import { validateDraftMove, validateRoster } from '../../utils/rosterValidation.js';
 import { LEAGUE_CONFIG } from '../../leagueConfig.js';
-import { mockPlayers } from '../fixtures/mockData.js';
+import { mockPlayers as _mockPlayers } from '../fixtures/mockData.js';
 
 // Mock the strategic recommendation system to return simple picks
 vi.mock('../../draftStrategy.js', () => ({
@@ -268,7 +268,7 @@ describe('Roster Validation During Simulation', () => {
          it('should handle edge case where no valid picks remain for a team', () => {
        // Create a scenario where a team has filled almost all positions
        // and only illegal picks remain
-       const constrainedTeam = {
+       const _constrainedTeam = {
          ...mockTeams[1],
          picks: [
            // Max out forwards (6 is the limit)

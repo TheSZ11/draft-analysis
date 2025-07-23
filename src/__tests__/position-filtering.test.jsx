@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
-import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react'
+import { render, screen, waitFor, cleanup } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { DraftProvider } from '../contexts/DraftContext.jsx'
 import { PlayerProvider } from '../contexts/PlayerContext.jsx'
@@ -82,7 +82,7 @@ describe('Position Filtering', () => {
       expect(screen.queryByText('Loading players...')).not.toBeInTheDocument()
     }, { timeout: 3000 })
 
-    const positionSelect = screen.getAllByDisplayValue('All Positions')[0];
+    const _positionSelect = screen.getAllByDisplayValue('All Positions')[0];
     
     // Check that all position options exist
     expect(screen.getAllByRole('option', { name: 'All Positions' })[0]).toBeInTheDocument()
