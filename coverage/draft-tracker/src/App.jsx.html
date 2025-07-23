@@ -1348,6 +1348,20 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1509,16 +1523,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1604,13 +1609,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -2402,6 +2402,20 @@
   //   return avgDifficulty;
   // };
 &nbsp;
+<span class="cstat-no" title="statement not covered" >  const getCurrentTeam = useCallback(() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    if (isSimulationMode) {</span>
+<span class="cstat-no" title="statement not covered" >      return getCurrentDraftTeam(isSimulationMode, userDraftPosition, simulationTeams);</span>
+<span class="cstat-no" title="statement not covered" >    } else {</span>
+      // Manual mode: use the teams from draft state
+<span class="cstat-no" title="statement not covered" >      return getCurrentDraftTeam(false, 1, teams);</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" >  }, [isSimulationMode, userDraftPosition, simulationTeams, teams, getCurrentDraftTeam]);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  const getAvailablePlayers = useCallback(() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    const currentTeam = getCurrentTeam();</span>
+<span class="cstat-no" title="statement not covered" >    return getFilteredPlayers(draftedPlayers, currentTeam, selectedPosition, searchTerm);</span>
+<span class="cstat-no" title="statement not covered" >  }, [getCurrentTeam, draftedPlayers, selectedPosition, searchTerm, getFilteredPlayers]);</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >  const getRecommendations = useCallback(() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    const currentTeam = getCurrentTeam();</span>
 <span class="cstat-no" title="statement not covered" >    if (!currentTeam || !currentTeam.positionLimits) return [];</span>
@@ -2562,15 +2576,6 @@
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" >  }, [availablePlayers, draftedPlayers, playerData]);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  const getCurrentTeam = useCallback(() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (isSimulationMode) {</span>
-<span class="cstat-no" title="statement not covered" >      return getCurrentDraftTeam(isSimulationMode, userDraftPosition, simulationTeams);</span>
-<span class="cstat-no" title="statement not covered" >    } else {</span>
-      // Manual mode: use the teams from draft state
-<span class="cstat-no" title="statement not covered" >      return getCurrentDraftTeam(false, 1, teams);</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" >  }, [isSimulationMode, userDraftPosition, simulationTeams, teams, getCurrentDraftTeam]);</span>
-&nbsp;
 <span class="cstat-no" title="statement not covered" >  const showTeamComplianceReport = useCallback((team) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    const report = generateComplianceReport(team);</span>
 <span class="cstat-no" title="statement not covered" >    const compliance = validateLeagueCompliance(team);</span>
@@ -2667,11 +2672,6 @@
 <span class="cstat-no" title="statement not covered" >      playerData.setAvailablePlayers(prev =&gt; prev.filter(p =&gt; p.id !== player.id));</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" >  };</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  const getAvailablePlayers = useCallback(() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    const currentTeam = getCurrentTeam();</span>
-<span class="cstat-no" title="statement not covered" >    return getFilteredPlayers(draftedPlayers, currentTeam, selectedPosition, searchTerm);</span>
-<span class="cstat-no" title="statement not covered" >  }, [getCurrentTeam, draftedPlayers, selectedPosition, searchTerm, getFilteredPlayers]);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  const _handlePlayerHover = (player, event) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    handlePlayerHoverHook(player, event);</span>
@@ -3241,7 +3241,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-23T21:25:57.797Z
+                at 2025-07-23T22:22:56.039Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

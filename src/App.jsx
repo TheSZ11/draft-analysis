@@ -223,6 +223,20 @@ const DraftTrackerContent = () => {
   //   return avgDifficulty;
   // };
 
+  const getCurrentTeam = useCallback(() => {
+    if (isSimulationMode) {
+      return getCurrentDraftTeam(isSimulationMode, userDraftPosition, simulationTeams);
+    } else {
+      // Manual mode: use the teams from draft state
+      return getCurrentDraftTeam(false, 1, teams);
+    }
+  }, [isSimulationMode, userDraftPosition, simulationTeams, teams, getCurrentDraftTeam]);
+
+  const getAvailablePlayers = useCallback(() => {
+    const currentTeam = getCurrentTeam();
+    return getFilteredPlayers(draftedPlayers, currentTeam, selectedPosition, searchTerm);
+  }, [getCurrentTeam, draftedPlayers, selectedPosition, searchTerm, getFilteredPlayers]);
+
   const getRecommendations = useCallback(() => {
     const currentTeam = getCurrentTeam();
     if (!currentTeam || !currentTeam.positionLimits) return [];
@@ -383,15 +397,6 @@ const DraftTrackerContent = () => {
     }
   }, [availablePlayers, draftedPlayers, playerData]);
 
-  const getCurrentTeam = useCallback(() => {
-    if (isSimulationMode) {
-      return getCurrentDraftTeam(isSimulationMode, userDraftPosition, simulationTeams);
-    } else {
-      // Manual mode: use the teams from draft state
-      return getCurrentDraftTeam(false, 1, teams);
-    }
-  }, [isSimulationMode, userDraftPosition, simulationTeams, teams, getCurrentDraftTeam]);
-
   const showTeamComplianceReport = useCallback((team) => {
     const report = generateComplianceReport(team);
     const compliance = validateLeagueCompliance(team);
@@ -488,11 +493,6 @@ const DraftTrackerContent = () => {
       playerData.setAvailablePlayers(prev => prev.filter(p => p.id !== player.id));
     }
   };
-
-  const getAvailablePlayers = useCallback(() => {
-    const currentTeam = getCurrentTeam();
-    return getFilteredPlayers(draftedPlayers, currentTeam, selectedPosition, searchTerm);
-  }, [getCurrentTeam, draftedPlayers, selectedPosition, searchTerm, getFilteredPlayers]);
 
   const _handlePlayerHover = (player, event) => {
     handlePlayerHoverHook(player, event);
